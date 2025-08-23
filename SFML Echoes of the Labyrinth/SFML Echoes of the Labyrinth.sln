@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36310.24 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SFML Echoes of the Labyrinth", "SFML Echoes of the Labyrinth\SFML Echoes of the Labyrinth.vcxproj", "{A5F6FBDE-3708-4AA1-9C74-CE0CC792B64A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A5F6FBDE-3708-4AA1-9C74-CE0CC792B64A}.Debug|x64.ActiveCfg = Debug|x64
+		{A5F6FBDE-3708-4AA1-9C74-CE0CC792B64A}.Debug|x64.Build.0 = Debug|x64
+		{A5F6FBDE-3708-4AA1-9C74-CE0CC792B64A}.Debug|x86.ActiveCfg = Debug|Win32
+		{A5F6FBDE-3708-4AA1-9C74-CE0CC792B64A}.Debug|x86.Build.0 = Debug|Win32
+		{A5F6FBDE-3708-4AA1-9C74-CE0CC792B64A}.Release|x64.ActiveCfg = Release|x64
+		{A5F6FBDE-3708-4AA1-9C74-CE0CC792B64A}.Release|x64.Build.0 = Release|x64
+		{A5F6FBDE-3708-4AA1-9C74-CE0CC792B64A}.Release|x86.ActiveCfg = Release|Win32
+		{A5F6FBDE-3708-4AA1-9C74-CE0CC792B64A}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7733E464-E462-4BBD-90F4-27AC952EDE1F}
+	EndGlobalSection
+EndGlobal
