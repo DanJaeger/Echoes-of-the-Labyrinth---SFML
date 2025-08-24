@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="SFML Echoes of the Labyrinth.cpp">
+    <ClCompile Include="game.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>

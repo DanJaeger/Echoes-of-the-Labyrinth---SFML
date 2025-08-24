@@ -1,10 +1,10 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\C\u002B\u002B\\SFML Echoes of the Labyrinth\\",
+  "WorkspaceRootPath": "D:\\C\u002B\u002B\\Echoes-of-the-Labyrinth---SFML\\SFML Echoes of the Labyrinth\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A5F6FBDE-3708-4AA1-9C74-CE0CC792B64A}|SFML Echoes of the Labyrinth\\SFML Echoes of the Labyrinth.vcxproj|D:\\C\u002B\u002B\\SFML Echoes of the Labyrinth\\SFML Echoes of the Labyrinth\\SFML Echoes of the Labyrinth.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{A5F6FBDE-3708-4AA1-9C74-CE0CC792B64A}|SFML Echoes of the Labyrinth\\SFML Echoes of the Labyrinth.vcxproj|solutionrelative:SFML Echoes of the Labyrinth\\SFML Echoes of the Labyrinth.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{A5F6FBDE-3708-4AA1-9C74-CE0CC792B64A}|SFML Echoes of the Labyrinth\\SFML Echoes of the Labyrinth.vcxproj|D:\\C\u002B\u002B\\Echoes-of-the-Labyrinth---SFML\\SFML Echoes of the Labyrinth\\SFML Echoes of the Labyrinth\\game.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A5F6FBDE-3708-4AA1-9C74-CE0CC792B64A}|SFML Echoes of the Labyrinth\\SFML Echoes of the Labyrinth.vcxproj|solutionrelative:SFML Echoes of the Labyrinth\\game.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -19,14 +19,14 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "SFML Echoes of the Labyrinth.cpp",
-              "DocumentMoniker": "D:\\C\u002B\u002B\\SFML Echoes of the Labyrinth\\SFML Echoes of the Labyrinth\\SFML Echoes of the Labyrinth.cpp",
-              "RelativeDocumentMoniker": "SFML Echoes of the Labyrinth\\SFML Echoes of the Labyrinth.cpp",
-              "ToolTip": "D:\\C\u002B\u002B\\SFML Echoes of the Labyrinth\\SFML Echoes of the Labyrinth\\SFML Echoes of the Labyrinth.cpp",
-              "RelativeToolTip": "SFML Echoes of the Labyrinth\\SFML Echoes of the Labyrinth.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAABAAAAAAAAAA==",
+              "Title": "game.cpp",
+              "DocumentMoniker": "D:\\C\u002B\u002B\\Echoes-of-the-Labyrinth---SFML\\SFML Echoes of the Labyrinth\\SFML Echoes of the Labyrinth\\game.cpp",
+              "RelativeDocumentMoniker": "SFML Echoes of the Labyrinth\\game.cpp",
+              "ToolTip": "D:\\C\u002B\u002B\\Echoes-of-the-Labyrinth---SFML\\SFML Echoes of the Labyrinth\\SFML Echoes of the Labyrinth\\game.cpp",
+              "RelativeToolTip": "SFML Echoes of the Labyrinth\\game.cpp",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAAAAAAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-08-16T22:22:38.804Z",
+              "WhenOpened": "2025-08-24T00:54:26.169Z",
               "EditorCaption": ""
             }
           ]
