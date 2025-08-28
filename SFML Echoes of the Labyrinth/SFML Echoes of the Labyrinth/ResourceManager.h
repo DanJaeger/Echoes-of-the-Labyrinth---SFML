@@ -8,8 +8,8 @@
 class ResourceManager {
 public:
     // Stop multiple copies
-    ResourceManager(const ResourceManager&) = delete;
-    ResourceManager& operator=(const ResourceManager&) = delete;
+    ResourceManager(const ResourceManager&) = delete; //doesn't allow to copy
+    ResourceManager& operator=(const ResourceManager&) = delete; //doesn't allow to assign
 
     // Singleton
     static ResourceManager& getInstance() {
@@ -28,7 +28,7 @@ public:
         if (!texture->loadFromFile(basePath + filename)) {
             std::cerr << "? Error loading texture: " << filename << std::endl;
         }
-        texture->setSmooth(true); // smoothing texture
+        texture->setSmooth(true); // bilinear filtering
 
         sf::Texture& ref = *texture;
         textures[filename] = std::move(texture);

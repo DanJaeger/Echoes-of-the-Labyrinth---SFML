@@ -4,6 +4,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "Labyrinth.h"
+#include "Player.h"
 
 class Game {
 public:
@@ -14,6 +15,7 @@ private:
     sf::RenderWindow window;
     sf::Event event;
     Labyrinth labyrinth;
+    Player player;
 
     void processEvents();
     void update(float deltaTime);

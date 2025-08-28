@@ -21,7 +21,9 @@ void Game::run() {
         processEvents();
 
         float deltaTime = clock.restart().asSeconds();
+
         update(deltaTime);
+
         render();
     }
 }
@@ -36,12 +38,16 @@ void Game::processEvents() {
 void Game::update(float deltaTime) {
     std::cout << "Elapsed time since previous frame (seconds): "
         << deltaTime << std::endl;
+
+    player.handleInput();
+    player.update(deltaTime);
 }
 
 void Game::render() {
     window.clear();
 
     labyrinth.draw(window);
+    player.draw(window);
 
     window.display();
 }
