@@ -1,12 +1,11 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "ResourceManager.h"
+#include "PlayerInput.h"
 
 class Player {
 public:
     Player();
-
-    void handleInput();
 
     void update(float dt);
 
@@ -22,6 +21,7 @@ private:
     float speed;        
 
     sf::RectangleShape shape;
+    PlayerInput input;
 };
 
 

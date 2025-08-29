@@ -11,21 +11,9 @@ Player::Player() {
     speed = 200.f; // default speed
 }
 
-void Player::handleInput() {
-    velocity = { 0.f, 0.f };
-
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) velocity.y -= 1.f;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) velocity.y += 1.f;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) velocity.x -= 1.f;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) velocity.x += 1.f;
-
-    // normalization
-    if (velocity.x != 0.f && velocity.y != 0.f)
-        velocity /= std::sqrt(2.f);
-}
-
 void Player::update(float dt) {
     //sprite.move(velocity * speed * dt);
+    velocity = input.getInputDirection();
     shape.move(velocity * speed * dt);
 }
 

@@ -39,7 +39,6 @@ void Game::update(float deltaTime) {
     std::cout << "Elapsed time since previous frame (seconds): "
         << deltaTime << std::endl;
 
-    player.handleInput();
     player.update(deltaTime);
 }
 
