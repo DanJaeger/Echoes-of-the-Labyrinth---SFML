@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "ResourceManager.h"
 #include "PlayerInput.h"
+#include "Collider.h"
 
 class Player {
 public:
@@ -15,12 +16,15 @@ public:
     sf::Vector2f getPosition() const;
     void setPosition(const sf::Vector2f& pos);
 
+    Collider& getCollider();
+
 private:
     sf::Sprite sprite;       // player sprite
     sf::Vector2f velocity;   // movement Direction
     float speed;        
 
     sf::RectangleShape shape;
+    Collider collider;
     PlayerInput input;
 };
 

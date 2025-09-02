@@ -2,12 +2,13 @@
 #include <cmath>
 //COMMENT: CHANGE TO SPRITE ON ALL THE FUNCTIONS WHEN USING A TEXTURE
 // Constructor
-Player::Player() {
+Player::Player() : collider(shape){
     //sprite.setTexture(ResourceManager::getInstance().getTexture("player.jpeg"));
     //sprite.setPosition(100.f, 100.f);
-    shape.setSize(sf::Vector2f(50.f, 50.f));   // rectángulo de 50x50 px
+    shape.setSize(sf::Vector2f(25.0f, 25.0f));   // rectángulo de 50x50 px
     shape.setFillColor(sf::Color::Red);       // color de relleno
     shape.setPosition(100.f, 100.f);
+    shape.setOrigin(shape.getSize() / 2.0f);
     speed = 200.f; // default speed
 }
 
@@ -20,6 +21,10 @@ void Player::update(float dt) {
 void Player::draw(sf::RenderWindow& window) {
     //window.draw(sprite);
     window.draw(shape);
+}
+
+Collider& Player::getCollider() {
+    return collider;
 }
 
 // Getters / Setters

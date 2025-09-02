@@ -102,12 +102,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\C++\SFML Echoes of the Labyrinth\sfml\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\C++\Echoes-of-the-Labyrinth---SFML\SFML Echoes of the Labyrinth\sfml\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>D:\C++\SFML Echoes of the Labyrinth\sfml\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>D:\C++\Echoes-of-the-Labyrinth---SFML\SFML Echoes of the Labyrinth\sfml\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-system-d.lib;sfml-graphics-d.lib;sfml-audio-d.lib;sfml-network-d.lib;sfml-window-d.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -119,28 +119,32 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\C++\SFML Echoes of the Labyrinth\sfml\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\C++\Echoes-of-the-Labyrinth---SFML\SFML Echoes of the Labyrinth\sfml\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>D:\C++\SFML Echoes of the Labyrinth\sfml\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>D:\C++\Echoes-of-the-Labyrinth---SFML\SFML Echoes of the Labyrinth\sfml\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-system.lib;sfml-graphics.lib;sfml-audio.lib;sfml-network.lib;sfml-window.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Collider.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Labyrinth.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerInput.cpp" />
+    <ClCompile Include="Walls.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Collider.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Labyrinth.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerInput.h" />
     <ClInclude Include="ResourceManager.h" />
+    <ClInclude Include="Walls.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

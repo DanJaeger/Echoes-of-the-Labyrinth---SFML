@@ -5,6 +5,7 @@
 #include <SFML/Graphics.hpp>
 #include "Labyrinth.h"
 #include "Player.h"
+#include "Walls.h"
 
 class Game {
 public:
@@ -16,6 +17,7 @@ private:
     sf::Event event;
     Labyrinth labyrinth;
     Player player;
+    Walls walls;
 
     void processEvents();
     void update(float deltaTime);

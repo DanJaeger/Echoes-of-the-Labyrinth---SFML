@@ -4,7 +4,9 @@
 
 Game::Game()
     : window(sf::VideoMode(640, 480), "Echoes of the Labyrinth"),
-    labyrinth("maze.jpg", window.getSize())
+    labyrinth("maze.jpg", window.getSize()),
+    walls(sf::Vector2f(200.f, 50.f), sf::Vector2f(300.f, 300.f)),
+    player()
 {
     window.setFramerateLimit(60);
 
@@ -40,6 +42,8 @@ void Game::update(float deltaTime) {
         << deltaTime << std::endl;
 
     player.update(deltaTime);
+
+    player.getCollider().checkCollision(walls.getCollider(), 0.0f);
 }
 
 void Game::render() {
@@ -47,6 +51,7 @@ void Game::render() {
 
     labyrinth.draw(window);
     player.draw(window);
+    walls.draw(window);
 
     window.display();
 }
