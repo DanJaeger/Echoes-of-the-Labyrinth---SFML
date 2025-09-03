@@ -4,16 +4,17 @@
 class Collider
 {
 public:
-	Collider(sf::RectangleShape& body);
+    explicit Collider(sf::RectangleShape* body) : body(body) {} //'explicit' is used to mark constructors to not implicitly convert types in C++
 
     bool checkCollision(Collider& other, float push);
-    void move(float dx, float dy);
+    void move(float dx, float dy) { body->move(dx, dy); }
 
-    // Getters
-    sf::Vector2f getPosition() const;
-    sf::Vector2f getHalfSize() const;
+    sf::Vector2f getPosition() const { return body->getPosition(); }
+    sf::Vector2f getHalfSize() const { return body->getSize() / 2.f; }
+
+    void rebind(sf::RectangleShape* newBody) { body = newBody; }
 
 private: 
-    sf::RectangleShape& body;
+    sf::RectangleShape* body;
 };
 

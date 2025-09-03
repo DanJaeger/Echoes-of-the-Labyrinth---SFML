@@ -17,7 +17,6 @@ private:
     sf::Event event;
     Labyrinth labyrinth;
     Player player;
-    Walls walls;
 
     void processEvents();
     void update(float deltaTime);

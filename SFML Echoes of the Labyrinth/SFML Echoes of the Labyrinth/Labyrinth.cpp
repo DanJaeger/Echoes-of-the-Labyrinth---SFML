@@ -16,9 +16,22 @@ Labyrinth::Labyrinth(const std::string& textureFile, const sf::Vector2u& windowS
     // Center texture
     sprite.setOrigin(textureSize.x / 2.0f, textureSize.y / 2.0f);
     sprite.setPosition(windowSize.x / 2.0f, windowSize.y / 2.0f);
+
+    walls.emplace_back(sf::Vector2f(200.f, 50.f), sf::Vector2f(300.f, 300.f));
+    walls.emplace_back(sf::Vector2f(50.f, 200.f), sf::Vector2f(150.f, 150.f));
 }
 
 void Labyrinth::draw(sf::RenderWindow& window) {
     window.draw(sprite);
+
+    for (auto& wall : walls)
+        wall.draw(window);
+}
+
+void Labyrinth::handleCollisions(Player& player)
+{
+    for (auto& wall : walls) {
+        player.getCollider().checkCollision(wall.getCollider(), 0.0f);
+    }
 }
 

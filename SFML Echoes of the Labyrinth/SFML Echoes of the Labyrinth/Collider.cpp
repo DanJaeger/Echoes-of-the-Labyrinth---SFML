@@ -2,20 +2,6 @@
 #include <algorithm> 
 #include <cmath>     
 
-Collider::Collider(sf::RectangleShape& body) : body(body) {}
-
-sf::Vector2f Collider::getPosition() const {
-    return body.getPosition();
-}
-
-sf::Vector2f Collider::getHalfSize() const {
-    return body.getSize() / 2.0f;
-}
-
-void Collider::move(float dx, float dy) {
-    body.move(dx, dy);
-}
-
 bool Collider::checkCollision(Collider& other, float push) {
     sf::Vector2f otherPosition = other.getPosition();
     sf::Vector2f otherHalfSize = other.getHalfSize();
