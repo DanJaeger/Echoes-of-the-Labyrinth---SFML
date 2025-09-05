@@ -13,6 +13,17 @@ Game::Game()
     window.setView(view);
 
     ResourceManager::getInstance().setBasePath("assets/textures/");
+
+    std::vector<std::vector<CellType>> layout = {
+    {CellType::WallHorizontal, CellType::Empty, CellType::WallVertical},
+    {CellType::Empty, CellType::WallVertical, CellType::Empty},
+    {CellType::WallHorizontal, CellType::Empty, CellType::Goal}
+    };
+
+    labyrinth.generateFromGrid(layout, sf::Vector2f(50.f, 30.f));
+
+    labyrinth.addBorderWalls(window.getSize().x, window.getSize().y, 20.f);
+
 }
 
 void Game::run() {
