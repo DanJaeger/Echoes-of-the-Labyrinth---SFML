@@ -9,8 +9,7 @@
 
 enum class CellType {
     Empty,
-    WallHorizontal,
-    WallVertical,
+    Wall,
     Goal
 };
 
@@ -22,6 +21,8 @@ public:
 
     void addBorderWalls(float width, float height, float thickness);
     void generateFromGrid(const std::vector<std::vector<CellType>>& layout, sf::Vector2f cellSize);
+    void generateMazeDFS(size_t rows, size_t cols, sf::Vector2f cellSize);
+
 
 private:
     sf::Texture texture;

@@ -3,7 +3,7 @@
 #include <iostream>
 
 Game::Game()
-    : window(sf::VideoMode(640, 480), "Echoes of the Labyrinth"),
+    : window(sf::VideoMode::getDesktopMode(), "Echoes of the Labyrinth", sf::Style::Fullscreen),
     labyrinth("maze.jpg", window.getSize()),
     player()
 {
@@ -14,15 +14,7 @@ Game::Game()
 
     ResourceManager::getInstance().setBasePath("assets/textures/");
 
-    std::vector<std::vector<CellType>> layout = {
-    {CellType::WallHorizontal, CellType::Empty, CellType::WallVertical},
-    {CellType::Empty, CellType::WallVertical, CellType::Empty},
-    {CellType::WallHorizontal, CellType::Empty, CellType::Goal}
-    };
-
-    labyrinth.generateFromGrid(layout, sf::Vector2f(50.f, 30.f));
-
-    labyrinth.addBorderWalls(window.getSize().x, window.getSize().y, 20.f);
+    initLabyrinth();
 
 }
 
@@ -42,8 +34,14 @@ void Game::run() {
 
 void Game::processEvents() {
     while (window.pollEvent(event)) {
-        if (event.type == sf::Event::Closed)
+        if (event.type == sf::Event::Closed) {
             window.close();
+        }
+        else if (event.type == sf::Event::KeyPressed) {
+            if (event.key.code == sf::Keyboard::Escape) {
+                window.close();
+            }
+        }
     }
 }
 
@@ -63,4 +61,22 @@ void Game::render() {
     player.draw(window);
 
     window.display();
+}
+
+void Game::initLabyrinth()
+{
+    // Fixed size of each cell
+    const int cellPixelSize = 32;
+
+    // Calculate number of rows and columns depending on the screen res
+    size_t cols = window.getSize().x / cellPixelSize;
+    size_t rows = window.getSize().y / cellPixelSize;
+
+    // Real size of the cells (fixed in case of extra room)
+    sf::Vector2f cellSize(
+        static_cast<float>(window.getSize().x) / cols,
+        static_cast<float>(window.getSize().y) / rows
+    );
+
+    labyrinth.generateMazeDFS(rows, cols, cellSize);
 }
