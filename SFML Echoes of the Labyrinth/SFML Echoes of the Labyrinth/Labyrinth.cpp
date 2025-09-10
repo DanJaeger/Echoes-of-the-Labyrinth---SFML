@@ -4,24 +4,17 @@
 #include <stack>
 #include <random>
 
-Labyrinth::Labyrinth(const std::string& textureFile, const sf::Vector2u& windowSize) {
-    texture = ResourceManager::getInstance().getTexture(textureFile);
-    sprite.setTexture(texture);
-
-    // Fixes background texture size
-    sf::Vector2u textureSize = texture.getSize();
-
-    float scaleX = static_cast<float>(windowSize.x) / textureSize.x;
-    float scaleY = static_cast<float>(windowSize.y) / textureSize.y;
-    sprite.setScale(scaleX, scaleY);
-
-    // Center texture
-    sprite.setOrigin(textureSize.x / 2.0f, textureSize.y / 2.0f);
-    sprite.setPosition(windowSize.x / 2.0f, windowSize.y / 2.0f);
+Labyrinth::Labyrinth()
+    : rng(std::random_device{}()) 
+{
+    loadTextures();
 }
 
 void Labyrinth::draw(sf::RenderWindow& window) {
-    window.draw(sprite);
+    window.draw(backgroundSprite);
+
+    for (auto& floor : floors)
+        floor.draw(window);
 
     for (auto& wall : walls)
         wall.draw(window);
@@ -39,25 +32,25 @@ void Labyrinth::addBorderWalls(float width, float height, float thickness)
     // TOP
     walls.emplace_back(
         sf::Vector2f(width, thickness),              // width = whole level, altitude = thickness
-        sf::Vector2f(width / 2.f, thickness / 2.f) 
+        sf::Vector2f(width / 2.f, thickness / 2.f), *borderTexture
     );
 
     // BOTTOM
     walls.emplace_back(
         sf::Vector2f(width, thickness),
-        sf::Vector2f(width / 2.f, height - thickness / 2.f)
+        sf::Vector2f(width / 2.f, height - thickness / 2.f), *borderTexture
     );
 
     // LEFT
     walls.emplace_back(
         sf::Vector2f(thickness, height),
-        sf::Vector2f(thickness / 2.f, height / 2.f)
+        sf::Vector2f(thickness / 2.f, height / 2.f), *borderTexture
     );
 
     // RIGHT
     walls.emplace_back(
         sf::Vector2f(thickness, height),
-        sf::Vector2f(width - thickness / 2.f, height / 2.f)
+        sf::Vector2f(width - thickness / 2.f, height / 2.f), *borderTexture
     );
 }
 
@@ -65,6 +58,7 @@ void Labyrinth::generateFromGrid(const std::vector<std::vector<CellType>>& layou
 {
     grid = layout;
     walls.clear();
+    floors.clear();
 
     for (size_t row = 0; row < grid.size(); row++) {
         for (size_t col = 0; col < grid[row].size(); col++) {
@@ -73,14 +67,19 @@ void Labyrinth::generateFromGrid(const std::vector<std::vector<CellType>>& layou
                 row * cellSize.y + cellSize.y / 2.f
             );
 
+            sf::Vector2f size(cellSize.x, cellSize.y);
+
             switch (grid[row][col]) {
             case CellType::Wall: {
-                sf::Vector2f size(cellSize.x, cellSize.y);
-                walls.emplace_back(size, pos);
+                walls.emplace_back(size, pos, *wallTexture);
                 break;
             }
             case CellType::Goal: {
                 // TODO: 
+                break;
+            }
+            case CellType::Empty: {
+                floors.emplace_back(size, pos, *floorTexture);
                 break;
             }
             default:
@@ -165,4 +164,15 @@ void Labyrinth::generateMazeDFS(size_t rows, size_t cols, sf::Vector2f cellSize)
     // 6. 
     addBorderWalls(cols * cellSize.x, rows * cellSize.y, BORDER_THICKNESS);
 }
+
+void Labyrinth::loadTextures()
+{
+    borderTexture = &ResourceManager::getInstance().getTexture("tiles/border.png");
+
+    wallTexture = &ResourceManager::getInstance().getTexture("tiles/wall.png");
+
+    floorTexture = &ResourceManager::getInstance().getTexture("tiles/floor.png");
+}
+
+
 

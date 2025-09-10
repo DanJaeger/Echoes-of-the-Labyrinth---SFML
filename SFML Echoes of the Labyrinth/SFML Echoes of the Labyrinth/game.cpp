@@ -4,7 +4,7 @@
 
 Game::Game()
     : window(sf::VideoMode::getDesktopMode(), "Echoes of the Labyrinth", sf::Style::Fullscreen),
-    labyrinth("maze.jpg", window.getSize()),
+    labyrinth(),
     player()
 {
     window.setFramerateLimit(60);

@@ -1,12 +1,16 @@
 #include "Walls.h"
 
-Walls::Walls(sf::Vector2f size, sf::Vector2f position)
+Walls::Walls(sf::Vector2f size, sf::Vector2f position, const sf::Texture& texture)
     : body(), collider(&body) // collider pointing to body
 {
     body.setSize(size);
-    body.setOrigin(size / 2.f);            
-    body.setFillColor(sf::Color::Blue);
+    body.setOrigin(size / 2.f);
     body.setPosition(position);
+
+    const_cast<sf::Texture&>(texture).setRepeated(true);
+    body.setTexture(&texture);
+
+    body.setTextureRect(sf::IntRect(0, 0, texture.getSize().x, texture.getSize().y));
 }
 
 Walls::Walls(Walls&& other) noexcept

@@ -5,7 +5,7 @@
 class Walls
 {
 public:
-	Walls(sf::Vector2f size, sf::Vector2f position);
+	Walls(sf::Vector2f size, sf::Vector2f position, const sf::Texture& texture);
 
 	Walls(Walls&& other) noexcept;
 	Walls& operator=(Walls&& other) noexcept;
