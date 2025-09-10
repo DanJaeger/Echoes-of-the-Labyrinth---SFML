@@ -1,10 +1,10 @@
 #include "Game.h"
 #include "ResourceManager.h"
 #include <iostream>
+#include <filesystem>
 
 Game::Game()
     : window(sf::VideoMode::getDesktopMode(), "Echoes of the Labyrinth", sf::Style::Fullscreen),
-    labyrinth(),
     player()
 {
     window.setFramerateLimit(60);
@@ -12,7 +12,10 @@ Game::Game()
     sf::View view(sf::FloatRect(0, 0, window.getSize().x, window.getSize().y));
     window.setView(view);
 
-    ResourceManager::getInstance().setBasePath("assets/textures/");
+    ResourceManager::getInstance().setTextureBasePath("assets/textures/");
+    ResourceManager::getInstance().setFontBasePath("assets/fonts/");
+
+    labyrinth = Labyrinth();
 
     initLabyrinth();
 
@@ -52,6 +55,7 @@ void Game::update(float deltaTime) {
     player.update(deltaTime);
 
     labyrinth.handleCollisions(player);
+    labyrinth.updateTimer();
 }
 
 void Game::render() {

@@ -8,6 +8,8 @@ Labyrinth::Labyrinth()
     : rng(std::random_device{}()) 
 {
     loadTextures();
+
+    setTimer();
 }
 
 void Labyrinth::draw(sf::RenderWindow& window) {
@@ -18,6 +20,9 @@ void Labyrinth::draw(sf::RenderWindow& window) {
 
     for (auto& wall : walls)
         wall.draw(window);
+
+    window.draw(timerText);
+
 }
 
 void Labyrinth::handleCollisions(Player& player)
@@ -172,6 +177,34 @@ void Labyrinth::loadTextures()
     wallTexture = &ResourceManager::getInstance().getTexture("tiles/wall.png");
 
     floorTexture = &ResourceManager::getInstance().getTexture("tiles/floor.png");
+}
+
+void Labyrinth::setTimer()
+{
+    timeLimit = sf::seconds(60);
+    gameClock.restart();
+
+    sf::Font& font = ResourceManager::getInstance().getFont("clock.ttf");
+    timerText.setFont(font);
+    timerText.setCharacterSize(24);
+    timerText.setFillColor(sf::Color::White);
+    timerText.setPosition(10, 10);
+    timerText.setOutlineColor(sf::Color::Black);
+    timerText.setOutlineThickness(2.f);
+}
+
+void Labyrinth::updateTimer() {
+    sf::Time elapsed = gameClock.getElapsedTime();
+    sf::Time remaining = timeLimit - elapsed;
+
+    int seconds = std::max(0, (int)remaining.asSeconds());
+    timerText.setString("Tiempo: " + std::to_string(seconds));
+
+    if (remaining.asSeconds() <= 0 && !timerExpired) {
+        timerExpired = true;
+        std::cout << "Tiempo agotado!No lograste recolectar todo." << std::endl;
+    }
+
 }
 
 

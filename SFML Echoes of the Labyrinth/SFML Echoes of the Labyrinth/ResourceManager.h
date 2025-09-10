@@ -25,7 +25,7 @@ public:
 
         // Load texture if it doesn't exist
         auto texture = std::make_unique<sf::Texture>();
-        if (!texture->loadFromFile(basePath + filename)) {
+        if (!texture->loadFromFile(textureBasePath + filename)) {
             std::cerr << "? Error loading texture: " << filename << std::endl;
         }
         texture->setSmooth(true); // bilinear filtering
@@ -35,15 +35,36 @@ public:
         return ref;
     }
 
-    // change the base folder for textures to assets/textures/
-    void setBasePath(const std::string& path) {
-        basePath = path;
+    sf::Font& getFont(const std::string& filename) {
+        auto it = fonts.find(filename);
+        if (it != fonts.end()) {
+            return *it->second;
+        }
+
+        auto font = std::make_unique<sf::Font>();
+        if (!font->loadFromFile(fontBasePath + filename)) {
+            std::cerr << "[ResourceManager] Error loading font: "
+                << fontBasePath + filename << std::endl;
+        }
+
+        sf::Font& ref = *font;
+        fonts[filename] = std::move(font);
+        return ref;
     }
 
-private:
-    ResourceManager() : basePath("assets/textures/") {}
 
-    std::string basePath;
+    void setTextureBasePath(const std::string& path) { textureBasePath = path; }
+    void setFontBasePath(const std::string& path) { fontBasePath = path; }
+
+private:
+    ResourceManager()
+        : textureBasePath("assets/textures/"), fontBasePath("assets/fonts/") {
+    }
+
+    std::string textureBasePath;
+    std::string fontBasePath;
+
     std::map<std::string, std::unique_ptr<sf::Texture>> textures;
+    std::map<std::string, std::unique_ptr<sf::Font>> fonts;
 };
 

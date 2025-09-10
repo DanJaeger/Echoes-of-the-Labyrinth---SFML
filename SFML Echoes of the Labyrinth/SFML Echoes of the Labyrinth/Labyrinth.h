@@ -26,6 +26,8 @@ public:
     void generateMazeDFS(size_t rows, size_t cols, sf::Vector2f cellSize);
 
     void loadTextures();
+    void setTimer();
+    void updateTimer();
 
 
 private:
@@ -43,6 +45,13 @@ private:
     std::vector<std::vector<CellType>> grid; //Matrix to represent the labyrinth
 
     std::mt19937 rng;
+
+    sf::Clock gameClock;      
+    sf::Time timeLimit;       
+    bool timerExpired = false;
+
+    sf::Font font;
+    sf::Text timerText;
 };
 
 #endif
