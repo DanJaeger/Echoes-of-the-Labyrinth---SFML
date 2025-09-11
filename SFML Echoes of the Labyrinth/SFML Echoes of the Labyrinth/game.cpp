@@ -55,7 +55,10 @@ void Game::update(float deltaTime) {
     player.update(deltaTime);
 
     labyrinth.handleCollisions(player);
-    labyrinth.updateTimer();
+    if (labyrinth.updateTimer(window)) 
+    {
+        player.setPosition({ 100.f, 100.f });
+    }
 }
 
 void Game::render() {

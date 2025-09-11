@@ -7,7 +7,7 @@ Player::Player() : shape(), collider(&shape){
     //sprite.setPosition(100.f, 100.f);
     shape.setSize(sf::Vector2f(25.0f, 25.0f));   // rectángulo de 50x50 px
     shape.setFillColor(sf::Color::Red);       // color de relleno
-    shape.setPosition(100.f, 100.f);
+    shape.setPosition({ 100.f, 100.f });
     shape.setOrigin(shape.getSize() / 2.0f);
     speed = 200.f; // default speed
 }

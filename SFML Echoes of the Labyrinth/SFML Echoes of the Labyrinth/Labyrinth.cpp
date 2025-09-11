@@ -181,7 +181,7 @@ void Labyrinth::loadTextures()
 
 void Labyrinth::setTimer()
 {
-    timeLimit = sf::seconds(60);
+    timeLimit = sf::seconds(5);
     gameClock.restart();
 
     sf::Font& font = ResourceManager::getInstance().getFont("clock.ttf");
@@ -193,7 +193,7 @@ void Labyrinth::setTimer()
     timerText.setOutlineThickness(2.f);
 }
 
-void Labyrinth::updateTimer() {
+bool Labyrinth::updateTimer(sf::RenderWindow& window) {
     sf::Time elapsed = gameClock.getElapsedTime();
     sf::Time remaining = timeLimit - elapsed;
 
@@ -202,9 +202,32 @@ void Labyrinth::updateTimer() {
 
     if (remaining.asSeconds() <= 0 && !timerExpired) {
         timerExpired = true;
-        std::cout << "Tiempo agotado!No lograste recolectar todo." << std::endl;
+        std::cout << "Tiempo agotado! Reiniciando nivel..." << std::endl;
+        reset(window.getSize());
+        return true;
+    }
+    else {
+        return false;
     }
 
+
+}
+
+void Labyrinth::reset(sf::Vector2u windowSize)
+{
+    gameClock.restart();
+    timerExpired = false;
+
+    const int cellPixelSize = 32;
+    size_t cols = windowSize.x / cellPixelSize;
+    size_t rows = windowSize.y / cellPixelSize;
+
+    sf::Vector2f cellSize(
+        static_cast<float>(windowSize.x) / cols,
+        static_cast<float>(windowSize.y) / rows
+    );
+
+    generateMazeDFS(rows, cols, cellSize);
 }
 
 

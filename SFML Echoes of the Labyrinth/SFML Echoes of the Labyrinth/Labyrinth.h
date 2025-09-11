@@ -27,7 +27,8 @@ public:
 
     void loadTextures();
     void setTimer();
-    void updateTimer();
+    bool updateTimer(sf::RenderWindow& window);
+    void reset(sf::Vector2u windowSize);
 
 
 private:
