@@ -8,6 +8,7 @@
 #include "Walls.h"
 #include "Player.h"
 #include "Floor.h"
+#include "Collectable.h"
 
 enum class CellType {
     Empty,
@@ -45,6 +46,9 @@ private:
 
     const sf::Texture* floorTexture;
     std::vector<Floor> floors;
+
+    const sf::Texture* collectableTexture;
+    std::vector<Collectable> collectables;
 
     std::vector<std::vector<CellType>> grid; //Matrix to represent the labyrinth
 

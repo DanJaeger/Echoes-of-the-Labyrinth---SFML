@@ -45,6 +45,9 @@ void Labyrinth::draw(sf::RenderWindow& window) {
 
     for (auto& wall : walls)
         wall.draw(window);
+
+    for (auto& collectable : collectables)
+        collectable.draw(window);
 }
 
 void Labyrinth::handleCollisions(Player& player)
@@ -52,6 +55,16 @@ void Labyrinth::handleCollisions(Player& player)
     for (auto& wall : walls) {
         player.getCollider().checkCollision(wall.getCollider(), 0.0f);
     }
+
+    for (auto& collectable : collectables) {
+        if (!collectable.isCollected() &&
+            player.getCollider().checkCollision(collectable.getCollider(), 0.0f))
+        {
+            collectable.collect();
+            std::cout << "Key collected!" << std::endl;
+        }
+    }
+
 }
 
 void Labyrinth::generateMazeDFS(size_t rows, size_t cols, sf::Vector2f cellSize)
@@ -126,7 +139,31 @@ void Labyrinth::generateMazeDFS(size_t rows, size_t cols, sf::Vector2f cellSize)
     // 5. Converting grid into walls
     generateFromGrid(grid, cellSize);
 
-    // 6. 
+    //Adding collectables
+    collectables.clear();
+    std::vector<sf::Vector2f> emptyCells;
+
+    for (size_t r = 0; r < rows; r++) {
+        for (size_t c = 0; c < cols; c++) {
+            if (grid[r][c] == CellType::Empty) {
+                emptyCells.push_back({
+                    c * cellSize.x + cellSize.x / 2.f,
+                    r * cellSize.y + cellSize.y / 2.f
+                    });
+            }
+        }
+    }
+
+    std::shuffle(emptyCells.begin(), emptyCells.end(), rng);
+
+    // reserve 4 cells
+    for (int i = 0; i < 4 && i < (int)emptyCells.size(); i++) {
+        collectables.emplace_back(sf::Vector2f(cellSize.x * 0.6f, cellSize.y * 0.6f),
+            emptyCells[i],
+            *collectableTexture);
+    }
+
+    
     addBorderWalls(cols * cellSize.x, rows * cellSize.y, BORDER_THICKNESS);
 }
 
@@ -199,4 +236,6 @@ void Labyrinth::loadTextures()
     wallTexture = &ResourceManager::getInstance().getTexture("tiles/wall.png");
 
     floorTexture = &ResourceManager::getInstance().getTexture("tiles/floor.png");
+
+    collectableTexture = &ResourceManager::getInstance().getTexture("items/collectable.png");
 }
