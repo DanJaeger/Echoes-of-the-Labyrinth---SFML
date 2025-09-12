@@ -8,8 +8,33 @@ Labyrinth::Labyrinth()
     : rng(std::random_device{}()) 
 {
     loadTextures();
+}
 
-    setTimer();
+void Labyrinth::generate(sf::Vector2u windowSize, unsigned cellPixelSize) {
+    cols = windowSize.x / cellPixelSize;
+    rows = windowSize.y / cellPixelSize;
+
+    cellSize = {
+        static_cast<float>(windowSize.x) / cols,
+        static_cast<float>(windowSize.y) / rows
+    };
+
+    reset(windowSize);
+}
+
+void Labyrinth::reset(sf::Vector2u windowSize) {
+    walls.clear();
+    floors.clear();
+    grid.clear();
+
+    generateMazeDFS(rows, cols, cellSize);
+}
+
+sf::Vector2f Labyrinth::getSpawnPoint() const {
+    return {
+        cellSize.x / 2.f,
+        cellSize.y / 2.f
+    };
 }
 
 void Labyrinth::draw(sf::RenderWindow& window) {
@@ -20,77 +45,12 @@ void Labyrinth::draw(sf::RenderWindow& window) {
 
     for (auto& wall : walls)
         wall.draw(window);
-
-    window.draw(timerText);
-
 }
 
 void Labyrinth::handleCollisions(Player& player)
 {
     for (auto& wall : walls) {
         player.getCollider().checkCollision(wall.getCollider(), 0.0f);
-    }
-}
-
-void Labyrinth::addBorderWalls(float width, float height, float thickness)
-{
-    // TOP
-    walls.emplace_back(
-        sf::Vector2f(width, thickness),              // width = whole level, altitude = thickness
-        sf::Vector2f(width / 2.f, thickness / 2.f), *borderTexture
-    );
-
-    // BOTTOM
-    walls.emplace_back(
-        sf::Vector2f(width, thickness),
-        sf::Vector2f(width / 2.f, height - thickness / 2.f), *borderTexture
-    );
-
-    // LEFT
-    walls.emplace_back(
-        sf::Vector2f(thickness, height),
-        sf::Vector2f(thickness / 2.f, height / 2.f), *borderTexture
-    );
-
-    // RIGHT
-    walls.emplace_back(
-        sf::Vector2f(thickness, height),
-        sf::Vector2f(width - thickness / 2.f, height / 2.f), *borderTexture
-    );
-}
-
-void Labyrinth::generateFromGrid(const std::vector<std::vector<CellType>>& layout, sf::Vector2f cellSize)
-{
-    grid = layout;
-    walls.clear();
-    floors.clear();
-
-    for (size_t row = 0; row < grid.size(); row++) {
-        for (size_t col = 0; col < grid[row].size(); col++) {
-            sf::Vector2f pos(
-                col * cellSize.x + cellSize.x / 2.f,
-                row * cellSize.y + cellSize.y / 2.f
-            );
-
-            sf::Vector2f size(cellSize.x, cellSize.y);
-
-            switch (grid[row][col]) {
-            case CellType::Wall: {
-                walls.emplace_back(size, pos, *wallTexture);
-                break;
-            }
-            case CellType::Goal: {
-                // TODO: 
-                break;
-            }
-            case CellType::Empty: {
-                floors.emplace_back(size, pos, *floorTexture);
-                break;
-            }
-            default:
-                break;
-            }
-        }
     }
 }
 
@@ -170,6 +130,68 @@ void Labyrinth::generateMazeDFS(size_t rows, size_t cols, sf::Vector2f cellSize)
     addBorderWalls(cols * cellSize.x, rows * cellSize.y, BORDER_THICKNESS);
 }
 
+void Labyrinth::generateFromGrid(const std::vector<std::vector<CellType>>& layout, sf::Vector2f cellSize)
+{
+    grid = layout;
+    walls.clear();
+    floors.clear();
+
+    for (size_t row = 0; row < grid.size(); row++) {
+        for (size_t col = 0; col < grid[row].size(); col++) {
+            sf::Vector2f pos(
+                col * cellSize.x + cellSize.x / 2.f,
+                row * cellSize.y + cellSize.y / 2.f
+            );
+
+            sf::Vector2f size(cellSize.x, cellSize.y);
+
+            switch (grid[row][col]) {
+            case CellType::Wall: {
+                walls.emplace_back(size, pos, *wallTexture);
+                break;
+            }
+            case CellType::Goal: {
+                // TODO: 
+                break;
+            }
+            case CellType::Empty: {
+                floors.emplace_back(size, pos, *floorTexture);
+                break;
+            }
+            default:
+                break;
+            }
+        }
+    }
+}
+
+void Labyrinth::addBorderWalls(float width, float height, float thickness)
+{
+    // TOP
+    walls.emplace_back(
+        sf::Vector2f(width, thickness),              // width = whole level, altitude = thickness
+        sf::Vector2f(width / 2.f, thickness / 2.f), *borderTexture
+    );
+
+    // BOTTOM
+    walls.emplace_back(
+        sf::Vector2f(width, thickness),
+        sf::Vector2f(width / 2.f, height - thickness / 2.f), *borderTexture
+    );
+
+    // LEFT
+    walls.emplace_back(
+        sf::Vector2f(thickness, height),
+        sf::Vector2f(thickness / 2.f, height / 2.f), *borderTexture
+    );
+
+    // RIGHT
+    walls.emplace_back(
+        sf::Vector2f(thickness, height),
+        sf::Vector2f(width - thickness / 2.f, height / 2.f), *borderTexture
+    );
+}
+
 void Labyrinth::loadTextures()
 {
     borderTexture = &ResourceManager::getInstance().getTexture("tiles/border.png");
@@ -178,57 +200,3 @@ void Labyrinth::loadTextures()
 
     floorTexture = &ResourceManager::getInstance().getTexture("tiles/floor.png");
 }
-
-void Labyrinth::setTimer()
-{
-    timeLimit = sf::seconds(5);
-    gameClock.restart();
-
-    sf::Font& font = ResourceManager::getInstance().getFont("clock.ttf");
-    timerText.setFont(font);
-    timerText.setCharacterSize(24);
-    timerText.setFillColor(sf::Color::White);
-    timerText.setPosition(10, 10);
-    timerText.setOutlineColor(sf::Color::Black);
-    timerText.setOutlineThickness(2.f);
-}
-
-bool Labyrinth::updateTimer(sf::RenderWindow& window) {
-    sf::Time elapsed = gameClock.getElapsedTime();
-    sf::Time remaining = timeLimit - elapsed;
-
-    int seconds = std::max(0, (int)remaining.asSeconds());
-    timerText.setString("Tiempo: " + std::to_string(seconds));
-
-    if (remaining.asSeconds() <= 0 && !timerExpired) {
-        timerExpired = true;
-        std::cout << "Tiempo agotado! Reiniciando nivel..." << std::endl;
-        reset(window.getSize());
-        return true;
-    }
-    else {
-        return false;
-    }
-
-
-}
-
-void Labyrinth::reset(sf::Vector2u windowSize)
-{
-    gameClock.restart();
-    timerExpired = false;
-
-    const int cellPixelSize = 32;
-    size_t cols = windowSize.x / cellPixelSize;
-    size_t rows = windowSize.y / cellPixelSize;
-
-    sf::Vector2f cellSize(
-        static_cast<float>(windowSize.x) / cols,
-        static_cast<float>(windowSize.y) / rows
-    );
-
-    generateMazeDFS(rows, cols, cellSize);
-}
-
-
-

@@ -15,9 +15,9 @@ Game::Game()
     ResourceManager::getInstance().setTextureBasePath("assets/textures/");
     ResourceManager::getInstance().setFontBasePath("assets/fonts/");
 
-    labyrinth = Labyrinth();
-
     initLabyrinth();
+
+    initTimer();
 
 }
 
@@ -49,16 +49,19 @@ void Game::processEvents() {
 }
 
 void Game::update(float deltaTime) {
-    std::cout << "Elapsed time since previous frame (seconds): "
-        << deltaTime << std::endl;
+    static float elapsedDebug = 0.f;
+    elapsedDebug += deltaTime;
+    if (elapsedDebug >= 1.f) {
+        std::cout << "FPS: " << 1.f / deltaTime << std::endl;
+        elapsedDebug = 0.f;
+    }
+
 
     player.update(deltaTime);
 
     labyrinth.handleCollisions(player);
-    if (labyrinth.updateTimer(window)) 
-    {
-        player.setPosition({ 100.f, 100.f });
-    }
+
+    timer.update();
 }
 
 void Game::render() {
@@ -66,24 +69,29 @@ void Game::render() {
 
     labyrinth.draw(window);
     player.draw(window);
+    timer.draw(window);
 
     window.display();
 }
 
 void Game::initLabyrinth()
 {
-    // Fixed size of each cell
-    const int cellPixelSize = 32;
+    labyrinth = Labyrinth();
+    labyrinth.generate(window.getSize());
+}
 
-    // Calculate number of rows and columns depending on the screen res
-    size_t cols = window.getSize().x / cellPixelSize;
-    size_t rows = window.getSize().y / cellPixelSize;
+void Game::initTimer() {
+    sf::Font& font = ResourceManager::getInstance().getFont("clock.ttf");
+    timer.setFont(font);
+    timer.setCharacterSize(24);
+    timer.setColors(sf::Color::White, sf::Color::Black, 2.f);
+    timer.setPosition({ 10.f, 10.f });
 
-    // Real size of the cells (fixed in case of extra room)
-    sf::Vector2f cellSize(
-        static_cast<float>(window.getSize().x) / cols,
-        static_cast<float>(window.getSize().y) / rows
-    );
+    timer.setOnTimeout([this]() {
+        labyrinth.reset(window.getSize());
+        player.setPosition(labyrinth.getSpawnPoint());
+        timer.start(sf::seconds(60));
+        });
 
-    labyrinth.generateMazeDFS(rows, cols, cellSize);
+    timer.start(sf::seconds(5));
 }

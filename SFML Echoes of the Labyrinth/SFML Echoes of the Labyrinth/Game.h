@@ -6,6 +6,7 @@
 #include "Labyrinth.h"
 #include "Player.h"
 #include "Walls.h"
+#include "GameTimer.h"
 
 class Game {
 public:
@@ -17,11 +18,14 @@ private:
     sf::Event event;
     Labyrinth labyrinth;
     Player player;
+    GameTimer timer;
 
     void processEvents();
     void update(float deltaTime);
     void render();
+
     void initLabyrinth();
+    void initTimer();
 };
 
 #endif

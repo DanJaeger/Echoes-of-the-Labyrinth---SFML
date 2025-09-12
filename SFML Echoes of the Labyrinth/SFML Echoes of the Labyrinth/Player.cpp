@@ -1,5 +1,6 @@
 #include "Player.h"
 #include <cmath>
+#include "GameTimer.h"
 //COMMENT: CHANGE TO SPRITE ON ALL THE FUNCTIONS WHEN USING A TEXTURE
 // Constructor
 Player::Player() : shape(), collider(&shape){

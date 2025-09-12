@@ -134,6 +134,7 @@
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="Floor.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="Labyrinth.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -144,6 +145,7 @@
     <ClInclude Include="Collider.h" />
     <ClInclude Include="Floor.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameTimer.h" />
     <ClInclude Include="Labyrinth.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerInput.h" />

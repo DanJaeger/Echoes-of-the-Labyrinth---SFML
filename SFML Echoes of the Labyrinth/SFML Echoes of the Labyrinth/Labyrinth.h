@@ -21,17 +21,20 @@ public:
     void draw(sf::RenderWindow& window);
     void handleCollisions(Player& player);
 
+    void generate(sf::Vector2u windowSize, unsigned cellPixelSize = 32);
+    void reset(sf::Vector2u windowSize);
+
+    sf::Vector2f getSpawnPoint() const; 
+
+   
+
+private:
     void addBorderWalls(float width, float height, float thickness);
     void generateFromGrid(const std::vector<std::vector<CellType>>& layout, sf::Vector2f cellSize);
     void generateMazeDFS(size_t rows, size_t cols, sf::Vector2f cellSize);
 
     void loadTextures();
-    void setTimer();
-    bool updateTimer(sf::RenderWindow& window);
-    void reset(sf::Vector2u windowSize);
 
-
-private:
     const sf::Texture* backgroundTexture;
     sf::Sprite backgroundSprite;
 
@@ -47,12 +50,9 @@ private:
 
     std::mt19937 rng;
 
-    sf::Clock gameClock;      
-    sf::Time timeLimit;       
-    bool timerExpired = false;
-
-    sf::Font font;
-    sf::Text timerText;
+    size_t rows;
+    size_t cols;
+    sf::Vector2f cellSize;
 };
 
 #endif
