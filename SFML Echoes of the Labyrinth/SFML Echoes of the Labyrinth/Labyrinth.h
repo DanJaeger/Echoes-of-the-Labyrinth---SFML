@@ -5,10 +5,13 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 #include <random> 
+#include <optional>
+#include <functional>
 #include "Walls.h"
 #include "Player.h"
 #include "Floor.h"
 #include "Collectable.h"
+#include "Goal.h"
 
 enum class CellType {
     Empty,
@@ -27,7 +30,7 @@ public:
 
     sf::Vector2f getSpawnPoint() const; 
 
-   
+    void setOnWin(std::function<void()> callback);
 
 private:
     void addBorderWalls(float width, float height, float thickness);
@@ -50,6 +53,10 @@ private:
     const sf::Texture* collectableTexture;
     std::vector<Collectable> collectables;
 
+    const sf::Texture* goalClosedTexture;
+    const sf::Texture* goalOpenTexture;
+    std::optional<Goal> goal;
+
     std::vector<std::vector<CellType>> grid; //Matrix to represent the labyrinth
 
     std::mt19937 rng;
@@ -57,6 +64,10 @@ private:
     size_t rows;
     size_t cols;
     sf::Vector2f cellSize;
+
+    int numberOfCollectables;
+
+    std::function<void()> onWin;
 };
 
 #endif

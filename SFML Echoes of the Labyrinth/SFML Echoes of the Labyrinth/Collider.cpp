@@ -43,3 +43,19 @@ bool Collider::checkCollision(Collider& other, float push) {
 
     return false;
 }
+
+bool Collider::intersects(const Collider& other) const {
+    sf::Vector2f otherPosition = other.getPosition();
+    sf::Vector2f otherHalfSize = other.getHalfSize();
+
+    sf::Vector2f thisPosition = getPosition();
+    sf::Vector2f thisHalfSize = getHalfSize();
+
+    float deltaX = otherPosition.x - thisPosition.x;
+    float deltaY = otherPosition.y - thisPosition.y;
+
+    float intersectX = std::abs(deltaX) - (otherHalfSize.x + thisHalfSize.x);
+    float intersectY = std::abs(deltaY) - (otherHalfSize.y + thisHalfSize.y);
+
+    return (intersectX < 0.0f && intersectY < 0.0f);
+}

@@ -8,6 +8,8 @@ Labyrinth::Labyrinth()
     : rng(std::random_device{}()) 
 {
     loadTextures();
+
+    numberOfCollectables = 4;
 }
 
 void Labyrinth::generate(sf::Vector2u windowSize, unsigned cellPixelSize) {
@@ -37,6 +39,11 @@ sf::Vector2f Labyrinth::getSpawnPoint() const {
     };
 }
 
+void Labyrinth::setOnWin(std::function<void()> callback)
+{
+    onWin = callback;
+}
+
 void Labyrinth::draw(sf::RenderWindow& window) {
     window.draw(backgroundSprite);
 
@@ -48,21 +55,39 @@ void Labyrinth::draw(sf::RenderWindow& window) {
 
     for (auto& collectable : collectables)
         collectable.draw(window);
+
+    if (goal.has_value())
+        goal->draw(window);
 }
 
-void Labyrinth::handleCollisions(Player& player)
+void Labyrinth::handleCollisions(Player& player) 
 {
     for (auto& wall : walls) {
         player.getCollider().checkCollision(wall.getCollider(), 0.0f);
     }
 
+    int collectedKeys = 0;
     for (auto& collectable : collectables) {
         if (!collectable.isCollected() &&
             player.getCollider().checkCollision(collectable.getCollider(), 0.0f))
         {
             collectable.collect();
-            std::cout << "Key collected!" << std::endl;
+            std::cout << "collectable collected!" << std::endl;
         }
+        if (collectable.isCollected()) collectedKeys++;
+            std::cout << "Collected keys: " + collectedKeys << std::endl;
+    }
+
+    // Abrir goal si ya tiene todas las llaves
+    if (goal.has_value() && collectedKeys >= numberOfCollectables && !goal->isOpen()) {
+        goal->open();
+        std::cout << "The door is now open!" << std::endl;
+    }
+
+    // Verificar si jugador llega al goal
+    if (goal.has_value() && goal->playerReached(player.getCollider()) && goal->isOpen()) {
+        std::cout << "YOU WIN!" << std::endl;
+        if (onWin) onWin();
     }
 
 }
@@ -133,13 +158,10 @@ void Labyrinth::generateMazeDFS(size_t rows, size_t cols, sf::Vector2f cellSize)
         }
     }
 
-    // 4. Define goal (On the oposite corner)
-    grid[rows - 1][cols - 1] = CellType::Goal;
-
-    // 5. Converting grid into walls
+    // 4. Converting grid into walls
     generateFromGrid(grid, cellSize);
 
-    //Adding collectables
+    //5. Adding collectables
     collectables.clear();
     std::vector<sf::Vector2f> emptyCells;
 
@@ -156,11 +178,34 @@ void Labyrinth::generateMazeDFS(size_t rows, size_t cols, sf::Vector2f cellSize)
 
     std::shuffle(emptyCells.begin(), emptyCells.end(), rng);
 
-    // reserve 4 cells
-    for (int i = 0; i < 4 && i < (int)emptyCells.size(); i++) {
+    // reserve number of collectables
+    for (int i = 0; i < numberOfCollectables && i < (int)emptyCells.size(); i++) {
         collectables.emplace_back(sf::Vector2f(cellSize.x * 0.6f, cellSize.y * 0.6f),
             emptyCells[i],
             *collectableTexture);
+    }
+
+    // Elegir una celda libre cerca del centro como goal
+    if (!emptyCells.empty()) {
+        // Ordenar por cercanía al centro
+        sf::Vector2f center(cols * cellSize.x / 2.f, rows * cellSize.y / 2.f);
+
+        std::sort(emptyCells.begin(), emptyCells.end(),
+            [center](const sf::Vector2f& a, const sf::Vector2f& b) {
+                float da = std::hypot(a.x - center.x, a.y - center.y);
+                float db = std::hypot(b.x - center.x, b.y - center.y);
+                return da < db;
+            });
+
+        // Primera celda cercana al centro
+        sf::Vector2f goalPos = emptyCells.front();
+
+        goal.emplace(
+            sf::Vector2f(cellSize.x * 0.8f, cellSize.y * 0.8f),
+            goalPos,
+            *goalClosedTexture,
+            *goalOpenTexture
+        );
     }
 
     
@@ -238,4 +283,7 @@ void Labyrinth::loadTextures()
     floorTexture = &ResourceManager::getInstance().getTexture("tiles/floor.png");
 
     collectableTexture = &ResourceManager::getInstance().getTexture("items/collectable.png");
+
+    goalClosedTexture = &ResourceManager::getInstance().getTexture("items/goal_closed.png");
+    goalOpenTexture = &ResourceManager::getInstance().getTexture("items/goal_open.png");
 }

@@ -1,0 +1,30 @@
+#pragma once
+#include <SFML/Graphics.hpp>
+#include "Collider.h"
+
+class Goal {
+public:
+    Goal(sf::Vector2f size, sf::Vector2f position,
+        const sf::Texture& closedTex, const sf::Texture& openTex);
+
+    Goal(Goal&& other) noexcept;
+    Goal& operator=(Goal&& other) noexcept;
+
+    Goal(const Goal&) = delete;
+    Goal& operator=(const Goal&) = delete;
+
+    void draw(sf::RenderWindow& window);
+    Collider& getCollider();
+
+    void open();
+    bool isOpen() const;
+
+    bool playerReached(const Collider& playerCollider) const;
+
+private:
+    sf::RectangleShape body;
+    Collider collider;
+    const sf::Texture* closedTexture;
+    const sf::Texture* openTexture;
+    bool openState;
+};

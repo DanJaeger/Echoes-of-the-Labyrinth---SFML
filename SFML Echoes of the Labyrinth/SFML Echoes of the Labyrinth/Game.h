@@ -26,6 +26,9 @@ private:
 
     void initLabyrinth();
     void initTimer();
+
+    void setBasePaths();
+    void initWindow();
 };
 
 #endif

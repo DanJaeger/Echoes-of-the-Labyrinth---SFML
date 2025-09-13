@@ -13,6 +13,7 @@ public:
     sf::Vector2f getHalfSize() const { return body->getSize() / 2.f; }
 
     void rebind(sf::RectangleShape* newBody) { body = newBody; }
+    bool intersects(const Collider& other) const;
 
 private: 
     sf::RectangleShape* body;

@@ -7,18 +7,28 @@ Game::Game()
     : window(sf::VideoMode::getDesktopMode(), "Echoes of the Labyrinth", sf::Style::Fullscreen),
     player()
 {
-    window.setFramerateLimit(60);
+    initWindow();
 
-    sf::View view(sf::FloatRect(0, 0, window.getSize().x, window.getSize().y));
-    window.setView(view);
-
-    ResourceManager::getInstance().setTextureBasePath("assets/textures/");
-    ResourceManager::getInstance().setFontBasePath("assets/fonts/");
+    setBasePaths();
 
     initLabyrinth();
 
     initTimer();
 
+}
+
+void Game::setBasePaths()
+{
+    ResourceManager::getInstance().setTextureBasePath("assets/textures/");
+    ResourceManager::getInstance().setFontBasePath("assets/fonts/");
+}
+
+void Game::initWindow()
+{
+    window.setFramerateLimit(60);
+
+    sf::View view(sf::FloatRect(0, 0, window.getSize().x, window.getSize().y));
+    window.setView(view);
 }
 
 void Game::run() {
@@ -78,6 +88,12 @@ void Game::initLabyrinth()
 {
     labyrinth = Labyrinth();
     labyrinth.generate(window.getSize());
+
+    labyrinth.setOnWin([this]() {
+        labyrinth.reset(window.getSize());
+        player.setPosition(labyrinth.getSpawnPoint());
+        timer.start(sf::seconds(240));
+        });
 }
 
 void Game::initTimer() {
@@ -90,8 +106,8 @@ void Game::initTimer() {
     timer.setOnTimeout([this]() {
         labyrinth.reset(window.getSize());
         player.setPosition(labyrinth.getSpawnPoint());
-        timer.start(sf::seconds(60));
+        timer.start(sf::seconds(240));
         });
 
-    timer.start(sf::seconds(5));
+    timer.start(sf::seconds(240));
 }
