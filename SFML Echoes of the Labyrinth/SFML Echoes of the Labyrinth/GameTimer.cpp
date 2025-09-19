@@ -7,7 +7,24 @@ GameTimer::GameTimer() {
     text.setFillColor(sf::Color::White);
     text.setOutlineColor(sf::Color::Black);
     text.setOutlineThickness(2.f);
-    text.setPosition(10.f, 10.f);
+
+    basePosition = { 10.f, 10.f };
+    margin = { 0.f, 0.f };
+    updatePosition();
+}
+
+void GameTimer::setPosition(const sf::Vector2f& pos) {
+    basePosition = pos;
+    updatePosition();
+}
+
+void GameTimer::setMargin(const sf::Vector2f& m) {
+    margin = m;
+    updatePosition();
+}
+
+void GameTimer::updatePosition() {
+    text.setPosition(basePosition + margin);
 }
 
 void GameTimer::start(sf::Time limit) {
@@ -44,10 +61,6 @@ void GameTimer::draw(sf::RenderWindow& window) {
 
 void GameTimer::setFont(const sf::Font& font) {
     text.setFont(font);
-}
-
-void GameTimer::setPosition(const sf::Vector2f& pos) {
-    text.setPosition(pos);
 }
 
 void GameTimer::setCharacterSize(unsigned int size) {

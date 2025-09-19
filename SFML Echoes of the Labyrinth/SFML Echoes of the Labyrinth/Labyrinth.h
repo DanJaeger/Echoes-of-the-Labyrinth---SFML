@@ -29,6 +29,9 @@ public:
     void generate(sf::Vector2u windowSize, unsigned cellPixelSize = 32);
     void reset(sf::Vector2u windowSize);
 
+    int getCollectablesCount() const;
+    int getCollectedCount() const;
+
     sf::Vector2f getSpawnPoint() const; 
 
     void setOnWin(std::function<void()> callback);

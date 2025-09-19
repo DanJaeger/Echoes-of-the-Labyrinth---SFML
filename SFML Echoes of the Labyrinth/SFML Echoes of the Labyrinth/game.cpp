@@ -13,7 +13,7 @@ Game::Game()
 
     initLabyrinth();
 
-    initTimer();
+    initHUD();
 
 }
 
@@ -70,7 +70,7 @@ void Game::update(float deltaTime) {
 
     labyrinth.update(deltaTime, player);
 
-    timer.update();
+    hud.update(labyrinth.getCollectedCount());
 }
 
 void Game::render() {
@@ -78,7 +78,7 @@ void Game::render() {
 
     labyrinth.draw(window);
     player.draw(window);
-    timer.draw(window);
+    hud.draw(window);
 
     window.display();
 }
@@ -91,22 +91,27 @@ void Game::initLabyrinth()
     labyrinth.setOnWin([this]() {
         labyrinth.reset(window.getSize());
         player.setPosition(labyrinth.getSpawnPoint());
-        timer.start(sf::seconds(240));
+        hud.startTimer(sf::seconds(240));
         });
 }
 
-void Game::initTimer() {
+void Game::initHUD() {
     sf::Font& font = ResourceManager::getInstance().getFont("clock.ttf");
-    timer.setFont(font);
-    timer.setCharacterSize(24);
-    timer.setColors(sf::Color::White, sf::Color::Black, 2.f);
-    timer.setPosition({ 10.f, 10.f });
+    hud.setFont(font);
+    hud.setTimerPosition({ 0.f, 0.f });       
+    hud.setTimerStyle(24, sf::Color::White, sf::Color::Black, 2.f);
+    hud.setMargin({ 15.f, 15.f });
 
-    timer.setOnTimeout([this]() {
+    hud.setOnTimeout([this]() {
         labyrinth.reset(window.getSize());
         player.setPosition(labyrinth.getSpawnPoint());
-        timer.start(sf::seconds(240));
+        hud.startTimer(sf::seconds(240));
         });
 
-    timer.start(sf::seconds(240));
+    hud.startTimer(sf::seconds(240));
+
+    hud.setCollectablesIcon(ResourceManager::getInstance().getTexture("items/collectable.png"));
+    hud.setCollectablesTotal(labyrinth.getCollectablesCount());
+    hud.setCollectablesPosition({ 0.f, 30.f });       
+    hud.setCollectablesSpacing(10.f);
 }

@@ -17,7 +17,8 @@ public:
     void setFont(const sf::Font& font);
     void setPosition(const sf::Vector2f& pos);
     void setCharacterSize(unsigned int size);
-    void setColors(sf::Color fill, sf::Color outline = sf::Color::Black, float thickness = 2.f);
+    void setColors(sf::Color fill, sf::Color outline = sf::Color::Black, float thickness = 2.f); 
+    void setMargin(const sf::Vector2f& margin);
 
     void setOnTimeout(std::function<void()> callback);
 
@@ -28,7 +29,12 @@ private:
 
     sf::Text text;
 
+    sf::Vector2f basePosition; 
+    sf::Vector2f margin;
+
     std::function<void()> onTimeout;
+
+    void updatePosition();
 };
 
 #endif

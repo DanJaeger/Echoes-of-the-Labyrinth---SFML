@@ -137,6 +137,7 @@
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="Collectable.cpp" />
     <ClCompile Include="Goal.cpp" />
+    <ClCompile Include="HUDCollectables.cpp" />
     <ClCompile Include="Labyrinth.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -151,6 +152,8 @@
     <ClInclude Include="GameTimer.h" />
     <ClInclude Include="Collectable.h" />
     <ClInclude Include="Goal.h" />
+    <ClInclude Include="HUD.h" />
+    <ClInclude Include="HUDCollectables.h" />
     <ClInclude Include="Labyrinth.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerInput.h" />

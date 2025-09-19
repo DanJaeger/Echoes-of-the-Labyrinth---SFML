@@ -44,6 +44,16 @@ void Labyrinth::reset(sf::Vector2u windowSize) {
     generateMazeDFS(rows, cols, cellSize);
 }
 
+int Labyrinth::getCollectablesCount() const
+{
+    return numberOfCollectables;
+}
+
+int Labyrinth::getCollectedCount() const
+{
+    return collectedKeys;
+}
+
 sf::Vector2f Labyrinth::getSpawnPoint() const {
     return {
         cellSize.x / 2.f,
