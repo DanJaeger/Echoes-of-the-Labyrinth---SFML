@@ -3,6 +3,7 @@
 #include "ResourceManager.h"
 #include "PlayerInput.h"
 #include "Collider.h"
+#include "Animation.h"
 
 class Player {
 public:
@@ -19,13 +20,26 @@ public:
     Collider& getCollider();
 
 private:
-    sf::Sprite sprite;       // player sprite
-    sf::Vector2f velocity;   // movement Direction
+    void initHitbox();
+    void initSprite();
+    void initAnimation();
+    void updateAnimation(sf::Vector2f velocity, float dt);
+    void moveSpriteWithHitbox();
+
+    sf::Sprite sprite;      
+    sf::Vector2f velocity;   
     float speed;        
 
-    sf::RectangleShape shape;
+    sf::RectangleShape hitbox;
     Collider collider;
     PlayerInput input;
+
+    Animation idleAnim;
+    Animation walkAnim;
+    Animation* currentAnim;
+
+    bool faceRight;
+    sf::Vector2f baseScale;
 };
 
 

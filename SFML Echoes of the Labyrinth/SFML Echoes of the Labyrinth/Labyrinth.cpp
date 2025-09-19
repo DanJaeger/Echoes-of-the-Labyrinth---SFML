@@ -5,11 +5,21 @@
 #include <random>
 
 Labyrinth::Labyrinth()
-    : rng(std::random_device{}()) 
+    : rng(std::random_device{}()) ,numberOfCollectables(4)
 {
     loadTextures();
+}
 
-    numberOfCollectables = 4;
+void Labyrinth::update(float dt, Player& player) {
+    handleCollisions(player);
+
+    if (goal.has_value()) {
+        goal->update(dt);
+    }
+
+    for (auto& collectable : collectables)
+        collectable.update(dt);
+    
 }
 
 void Labyrinth::generate(sf::Vector2u windowSize, unsigned cellPixelSize) {
@@ -28,6 +38,8 @@ void Labyrinth::reset(sf::Vector2u windowSize) {
     walls.clear();
     floors.clear();
     grid.clear();
+
+    collectedKeys = 0;
 
     generateMazeDFS(rows, cols, cellSize);
 }
@@ -53,7 +65,7 @@ void Labyrinth::draw(sf::RenderWindow& window) {
     for (auto& wall : walls)
         wall.draw(window);
 
-    for (auto& collectable : collectables)
+    for (auto& collectable : collectables) 
         collectable.draw(window);
 
     if (goal.has_value())
@@ -66,16 +78,14 @@ void Labyrinth::handleCollisions(Player& player)
         player.getCollider().checkCollision(wall.getCollider(), 0.0f);
     }
 
-    int collectedKeys = 0;
     for (auto& collectable : collectables) {
         if (!collectable.isCollected() &&
             player.getCollider().checkCollision(collectable.getCollider(), 0.0f))
         {
             collectable.collect();
+            collectedKeys++;
             std::cout << "collectable collected!" << std::endl;
         }
-        if (collectable.isCollected()) collectedKeys++;
-            std::cout << "Collected keys: " + collectedKeys << std::endl;
     }
 
     // Abrir goal si ya tiene todas las llaves
@@ -284,6 +294,6 @@ void Labyrinth::loadTextures()
 
     collectableTexture = &ResourceManager::getInstance().getTexture("items/collectable.png");
 
-    goalClosedTexture = &ResourceManager::getInstance().getTexture("items/goal_closed.png");
-    goalOpenTexture = &ResourceManager::getInstance().getTexture("items/goal_open.png");
+    goalClosedTexture = &ResourceManager::getInstance().getTexture("items/chest_empty_0.png");
+    goalOpenTexture = &ResourceManager::getInstance().getTexture("items/chest_full_open.png");
 }

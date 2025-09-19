@@ -66,10 +66,9 @@ void Game::update(float deltaTime) {
         elapsedDebug = 0.f;
     }
 
-
     player.update(deltaTime);
 
-    labyrinth.handleCollisions(player);
+    labyrinth.update(deltaTime, player);
 
     timer.update();
 }

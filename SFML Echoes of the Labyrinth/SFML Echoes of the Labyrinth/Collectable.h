@@ -12,6 +12,7 @@ public:
     Collectable(const Collectable&) = delete;
     Collectable& operator=(const Collectable&) = delete;
 
+    void update(float dt);
     void draw(sf::RenderWindow& window);
     Collider& getCollider();
 
@@ -22,4 +23,9 @@ private:
     sf::RectangleShape body;
     Collider collider;
     bool collected;
+
+    sf::Vector2f basePosition;
+    float elapsedTime;
+    float floatSpeed;  
+    float floatHeight;
 };

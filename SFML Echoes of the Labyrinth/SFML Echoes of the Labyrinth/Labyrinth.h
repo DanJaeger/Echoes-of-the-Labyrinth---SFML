@@ -22,6 +22,7 @@ enum class CellType {
 class Labyrinth {
 public:
     Labyrinth();
+    void update(float dt, Player& player);
     void draw(sf::RenderWindow& window);
     void handleCollisions(Player& player);
 
@@ -66,6 +67,7 @@ private:
     sf::Vector2f cellSize;
 
     int numberOfCollectables;
+    int collectedKeys = 0;
 
     std::function<void()> onWin;
 };

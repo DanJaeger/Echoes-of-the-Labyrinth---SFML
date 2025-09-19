@@ -1,7 +1,9 @@
 #include "Collectable.h"
 
 Collectable::Collectable(sf::Vector2f size, sf::Vector2f position, const sf::Texture& texture)
-    : body(), collider(&body), collected(false)
+    : body(), collider(&body), collected(false), 
+    basePosition(position), elapsedTime(0.f),
+    floatSpeed(5.f), floatHeight(2.f)
 {
     body.setSize(size);
     body.setOrigin(size / 2.f);
@@ -11,7 +13,9 @@ Collectable::Collectable(sf::Vector2f size, sf::Vector2f position, const sf::Tex
 }
 
 Collectable::Collectable(Collectable&& other) noexcept
-    : body(std::move(other.body)), collider(&body), collected(other.collected)
+    : body(std::move(other.body)), collider(&body), collected(other.collected),
+    basePosition(other.basePosition), elapsedTime(other.elapsedTime),
+    floatSpeed(other.floatSpeed), floatHeight(other.floatHeight)
 {
 }
 
@@ -20,8 +24,20 @@ Collectable& Collectable::operator=(Collectable&& other) noexcept {
         body = std::move(other.body);
         collider.rebind(&body);
         collected = other.collected;
+        basePosition = other.basePosition;
+        elapsedTime = other.elapsedTime;
+        floatSpeed = other.floatSpeed;
+        floatHeight = other.floatHeight;
     }
     return *this;
+}
+
+void Collectable::update(float dt) {
+    if (!collected) {
+        elapsedTime += dt;
+        float offsetY = std::sin(elapsedTime * floatSpeed) * floatHeight;
+        body.setPosition(basePosition.x, basePosition.y + offsetY);
+    }
 }
 
 void Collectable::draw(sf::RenderWindow& window) {

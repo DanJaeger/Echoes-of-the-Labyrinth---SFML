@@ -144,6 +144,7 @@
     <ClCompile Include="Walls.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Animation.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="Floor.h" />
     <ClInclude Include="Game.h" />
