@@ -29,6 +29,8 @@ private:
 
     void setBasePaths();
     void initWindow();
+
+    void initAudio();
 };
 
 #endif

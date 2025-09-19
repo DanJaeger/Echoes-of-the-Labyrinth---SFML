@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "ResourceManager.h"
+#include "AudioManager.h"
 #include <iostream>
 #include <filesystem>
 
@@ -8,6 +9,8 @@ Game::Game()
     player()
 {
     initWindow();
+
+    initAudio();
 
     setBasePaths();
 
@@ -29,6 +32,16 @@ void Game::initWindow()
 
     sf::View view(sf::FloatRect(0, 0, window.getSize().x, window.getSize().y));
     window.setView(view);
+}
+
+void Game::initAudio() {
+    auto& audio = AudioManager::getInstance();
+
+    //SFX
+    audio.loadSound("pickup", "assets/audio/pickup.wav");
+    audio.loadSound("openChest", "assets/audio/open_chest.wav");
+
+    audio.playMusic("assets/audio/bg_music.ogg", true, 50.f);
 }
 
 void Game::run() {
@@ -71,6 +84,8 @@ void Game::update(float deltaTime) {
     labyrinth.update(deltaTime, player);
 
     hud.update(labyrinth.getCollectedCount());
+
+    AudioManager::getInstance().update();
 }
 
 void Game::render() {

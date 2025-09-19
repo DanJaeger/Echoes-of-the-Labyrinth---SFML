@@ -1,11 +1,12 @@
 #include "Labyrinth.h"
 #include "ResourceManager.h"
+#include "AudioManager.h"
 #include <iostream>
 #include <stack>
 #include <random>
 
 Labyrinth::Labyrinth()
-    : rng(std::random_device{}()) ,numberOfCollectables(4)
+    : rng(std::random_device{}()) ,numberOfCollectables(1)
 {
     loadTextures();
 }
@@ -94,6 +95,7 @@ void Labyrinth::handleCollisions(Player& player)
         {
             collectable.collect();
             collectedKeys++;
+            AudioManager::getInstance().playSound("pickup");
             std::cout << "collectable collected!" << std::endl;
         }
     }
@@ -102,6 +104,7 @@ void Labyrinth::handleCollisions(Player& player)
     if (goal.has_value() && collectedKeys >= numberOfCollectables && !goal->isOpen()) {
         goal->open();
         std::cout << "The door is now open!" << std::endl;
+        AudioManager::getInstance().playSound("openChest");
     }
 
     // Verificar si jugador llega al goal
