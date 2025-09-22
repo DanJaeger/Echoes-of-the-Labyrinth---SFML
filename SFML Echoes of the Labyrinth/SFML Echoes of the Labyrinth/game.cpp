@@ -1,8 +1,12 @@
 #include "Game.h"
 #include "ResourceManager.h"
 #include "AudioManager.h"
-#include <iostream>
-#include <filesystem>
+#include "IGameState.h"
+#include "MenuState.h"
+#include "PlayingState.h"
+#include "PausedState.h"
+#include "WinState.h"
+#include "LoseState.h"
 
 Game::Game()
     : window(sf::VideoMode::getDesktopMode(), "Echoes of the Labyrinth", sf::Style::Fullscreen),
@@ -18,6 +22,17 @@ Game::Game()
 
     initHUD();
 
+    changeState(StateType::Menu);
+}
+
+void Game::changeState(StateType newState) {
+    switch (newState) {
+    case StateType::Menu:   currentState = std::make_unique<MenuState>(*this); break;
+    case StateType::Playing:currentState = std::make_unique<PlayingState>(); break;
+    case StateType::Paused: currentState = std::make_unique<PausedState>(*this); break;
+    case StateType::Win:    currentState = std::make_unique<WinState>(*this); break;
+    case StateType::Lose:   currentState = std::make_unique<LoseState>(*this); break;
+    }
 }
 
 void Game::setBasePaths()
@@ -63,31 +78,7 @@ void Game::processEvents() {
         if (event.type == sf::Event::Closed) {
             window.close();
         }
-
-        if (state == GameState::Menu && mainMenu) {
-            mainMenu->processEvent(event);
-        }
-        else if (state == GameState::Paused && pauseMenu) {
-            pauseMenu->processEvent(event);
-        }
-        else if (state == GameState::Win && winMenu) {
-            winMenu->processEvent(event);
-        }
-        else if (state == GameState::Lose && loseMenu) {
-            loseMenu->processEvent(event);
-        }
-
-        if (event.type == sf::Event::KeyPressed &&
-            event.key.code == sf::Keyboard::Escape)
-        {
-            if (state == GameState::Playing) {
-                state = GameState::Paused;
-                pauseMenu->reset();
-            }
-            else if (state == GameState::Paused) {
-                state = GameState::Playing;
-            }
-        }
+        if (currentState) currentState->handleEvent(*this, event);
     }
 }
 
@@ -98,94 +89,13 @@ void Game::update(float deltaTime) {
         std::cout << "FPS: " << 1.f / deltaTime << std::endl;
         elapsedDebug = 0.f;
     }
-
-    if (state == GameState::Menu) {
-        int opt = mainMenu->pollSelectedOption();
-        if (opt == 0) { // Start
-            state = GameState::Playing;
-            mainMenu->reset();
-        }
-        else if (opt == 1) { // Quit
-            window.close();
-        }
-    }
-    else if (state == GameState::Paused) {
-        int opt = pauseMenu->pollSelectedOption();
-        if (opt == 0) { // Restart
-            labyrinth.reset(window.getSize());
-            player.setPosition(labyrinth.getSpawnPoint());
-            hud.startTimer(sf::seconds(240));
-            state = GameState::Playing;
-            pauseMenu->reset();
-        }
-        else if (opt == 1) { // Quit
-            window.close();
-        }
-    }
-    else if (state == GameState::Win) {
-        int opt = winMenu->pollSelectedOption();
-        if (opt == 0) { // Restart
-            labyrinth.reset(window.getSize());
-            player.setPosition(labyrinth.getSpawnPoint());
-            hud.startTimer(sf::seconds(240));
-            state = GameState::Playing;
-            winMenu->reset();
-        }
-        else if (opt == 1) { // Quit
-            window.close();
-        }
-    }
-    else if (state == GameState::Lose) {
-        int opt = loseMenu->pollSelectedOption();
-        if (opt == 0) { // Restart
-            labyrinth.reset(window.getSize());
-            player.setPosition(labyrinth.getSpawnPoint());
-            hud.startTimer(sf::seconds(240));
-            state = GameState::Playing;
-            loseMenu->reset();
-        }
-        else if (opt == 1) { // Quit
-            window.close();
-        }
-    }
-    else if (state == GameState::Playing) {
-        player.update(deltaTime);
-        labyrinth.update(deltaTime, player);
-        hud.update(labyrinth.getCollectedCount());
-
-        AudioManager::getInstance().update();
-    }
+    if (currentState) currentState->update(*this, deltaTime);
 }
 
 void Game::render() {
     window.clear();
 
-    if (state == GameState::Menu) {
-        mainMenu->draw();
-    }
-    else if (state == GameState::Paused) {
-        labyrinth.draw(window);
-        player.draw(window);
-        hud.draw(window);
-        pauseMenu->draw();
-    }
-    else if (state == GameState::Playing) {
-        labyrinth.draw(window);
-        player.draw(window);
-        hud.draw(window);
-    }
-    else if (state == GameState::Win) {
-        labyrinth.draw(window);
-        player.draw(window);
-        hud.draw(window);
-        winMenu->draw();
-    }
-    else if (state == GameState::Lose) {
-        labyrinth.draw(window);
-        player.draw(window);
-        hud.draw(window);
-        loseMenu->draw();
-    }
+    if (currentState) currentState->draw(*this, window);
 
     window.display();
 }
@@ -196,7 +106,7 @@ void Game::initLabyrinth()
     labyrinth.generate(window.getSize());
 
     labyrinth.setOnWin([this]() {
-        state = GameState::Win;
+        changeState(StateType::Win);
         });
 }
 
@@ -208,7 +118,7 @@ void Game::initHUD() {
     hud.setMargin({ 15.f, 15.f });
 
     hud.setOnTimeout([this]() {
-        state = GameState::Lose;
+        changeState(StateType::Lose);
         });
 
     hud.startTimer(sf::seconds(240));
@@ -217,20 +127,4 @@ void Game::initHUD() {
     hud.setCollectablesTotal(labyrinth.getCollectablesCount());
     hud.setCollectablesPosition({ 0.f, 30.f });       
     hud.setCollectablesSpacing(10.f);
-
-    mainMenu = std::make_unique<MenuScreen>(window, font, false);
-    mainMenu->setTitle("Echoes of the Labyrinth");
-    mainMenu->setOptions({ "Start", "Quit" });
-
-    pauseMenu = std::make_unique<MenuScreen>(window, font, true);
-    pauseMenu->setTitle("Pause");
-    pauseMenu->setOptions({ "Restart", "Quit" });
-
-    winMenu = std::make_unique<MenuScreen>(window, font, true);
-    winMenu->setTitle("¡You Won!");
-    winMenu->setOptions({ "Restart", "Quit" });
-
-    loseMenu = std::make_unique<MenuScreen>(window, font, true);
-    loseMenu->setTitle("You Lost");
-    loseMenu->setOptions({ "Restart", "Quit" });
 }

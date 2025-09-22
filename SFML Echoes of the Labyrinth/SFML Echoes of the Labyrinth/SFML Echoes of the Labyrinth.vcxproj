@@ -140,11 +140,16 @@
     <ClCompile Include="Goal.cpp" />
     <ClCompile Include="HUDCollectables.cpp" />
     <ClCompile Include="Labyrinth.cpp" />
+    <ClCompile Include="LoseState.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MenuScreen.cpp" />
+    <ClCompile Include="MenuState.cpp" />
+    <ClCompile Include="PausedState.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerInput.cpp" />
+    <ClCompile Include="PlayingState.cpp" />
     <ClCompile Include="Walls.cpp" />
+    <ClCompile Include="WinState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
@@ -157,12 +162,18 @@
     <ClInclude Include="Goal.h" />
     <ClInclude Include="HUD.h" />
     <ClInclude Include="HUDCollectables.h" />
+    <ClInclude Include="IGameState.h" />
     <ClInclude Include="Labyrinth.h" />
+    <ClInclude Include="LoseState.h" />
     <ClInclude Include="MenuScreen.h" />
+    <ClInclude Include="MenuState.h" />
+    <ClInclude Include="PausedState.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerInput.h" />
+    <ClInclude Include="PlayingState.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Walls.h" />
+    <ClInclude Include="WinState.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

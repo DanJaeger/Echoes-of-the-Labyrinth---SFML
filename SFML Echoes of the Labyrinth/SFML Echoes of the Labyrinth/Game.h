@@ -3,37 +3,31 @@
 #define GAME_H
 
 #include <SFML/Graphics.hpp>
+#include <memory>
+#include "IGameState.h" 
 #include "Labyrinth.h"
 #include "Player.h"
-#include "Walls.h"
 #include "HUD.h"
-#include "MenuScreen.h"
 
-enum class GameState {
-    Menu,
-    Playing,
-    Paused,
-    Win, 
-    Lose
-};
+class IGameState;
 
 class Game {
 public:
     Game();
     void run();
 
-private:
+    enum class StateType { Menu, Playing, Paused, Win, Lose };
+
+    void changeState(StateType newState);
+
     sf::RenderWindow window;
     sf::Event event;
-    Labyrinth labyrinth;
     Player player;
+    Labyrinth labyrinth;
     HUD hud;
 
-    GameState state;
-    std::unique_ptr<MenuScreen> mainMenu;
-    std::unique_ptr<MenuScreen> pauseMenu;
-    std::unique_ptr<MenuScreen> winMenu;
-    std::unique_ptr<MenuScreen> loseMenu;
+private:
+    std::unique_ptr<IGameState> currentState;
 
     void processEvents();
     void update(float deltaTime);

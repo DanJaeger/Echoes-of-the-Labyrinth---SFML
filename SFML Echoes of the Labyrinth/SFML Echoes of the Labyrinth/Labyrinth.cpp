@@ -6,7 +6,7 @@
 #include <random>
 
 Labyrinth::Labyrinth()
-    : rng(std::random_device{}()) ,numberOfCollectables(1)
+    : rng(std::random_device{}()) ,numberOfCollectables(4)
 {
     loadTextures();
 }
