@@ -7,6 +7,15 @@
 #include "Player.h"
 #include "Walls.h"
 #include "HUD.h"
+#include "MenuScreen.h"
+
+enum class GameState {
+    Menu,
+    Playing,
+    Paused,
+    Win, 
+    Lose
+};
 
 class Game {
 public:
@@ -19,6 +28,12 @@ private:
     Labyrinth labyrinth;
     Player player;
     HUD hud;
+
+    GameState state;
+    std::unique_ptr<MenuScreen> mainMenu;
+    std::unique_ptr<MenuScreen> pauseMenu;
+    std::unique_ptr<MenuScreen> winMenu;
+    std::unique_ptr<MenuScreen> loseMenu;
 
     void processEvents();
     void update(float deltaTime);

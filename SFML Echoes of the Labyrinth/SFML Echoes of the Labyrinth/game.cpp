@@ -63,9 +63,29 @@ void Game::processEvents() {
         if (event.type == sf::Event::Closed) {
             window.close();
         }
-        else if (event.type == sf::Event::KeyPressed) {
-            if (event.key.code == sf::Keyboard::Escape) {
-                window.close();
+
+        if (state == GameState::Menu && mainMenu) {
+            mainMenu->processEvent(event);
+        }
+        else if (state == GameState::Paused && pauseMenu) {
+            pauseMenu->processEvent(event);
+        }
+        else if (state == GameState::Win && winMenu) {
+            winMenu->processEvent(event);
+        }
+        else if (state == GameState::Lose && loseMenu) {
+            loseMenu->processEvent(event);
+        }
+
+        if (event.type == sf::Event::KeyPressed &&
+            event.key.code == sf::Keyboard::Escape)
+        {
+            if (state == GameState::Playing) {
+                state = GameState::Paused;
+                pauseMenu->reset();
+            }
+            else if (state == GameState::Paused) {
+                state = GameState::Playing;
             }
         }
     }
@@ -79,21 +99,93 @@ void Game::update(float deltaTime) {
         elapsedDebug = 0.f;
     }
 
-    player.update(deltaTime);
+    if (state == GameState::Menu) {
+        int opt = mainMenu->pollSelectedOption();
+        if (opt == 0) { // Start
+            state = GameState::Playing;
+            mainMenu->reset();
+        }
+        else if (opt == 1) { // Quit
+            window.close();
+        }
+    }
+    else if (state == GameState::Paused) {
+        int opt = pauseMenu->pollSelectedOption();
+        if (opt == 0) { // Restart
+            labyrinth.reset(window.getSize());
+            player.setPosition(labyrinth.getSpawnPoint());
+            hud.startTimer(sf::seconds(240));
+            state = GameState::Playing;
+            pauseMenu->reset();
+        }
+        else if (opt == 1) { // Quit
+            window.close();
+        }
+    }
+    else if (state == GameState::Win) {
+        int opt = winMenu->pollSelectedOption();
+        if (opt == 0) { // Restart
+            labyrinth.reset(window.getSize());
+            player.setPosition(labyrinth.getSpawnPoint());
+            hud.startTimer(sf::seconds(240));
+            state = GameState::Playing;
+            winMenu->reset();
+        }
+        else if (opt == 1) { // Quit
+            window.close();
+        }
+    }
+    else if (state == GameState::Lose) {
+        int opt = loseMenu->pollSelectedOption();
+        if (opt == 0) { // Restart
+            labyrinth.reset(window.getSize());
+            player.setPosition(labyrinth.getSpawnPoint());
+            hud.startTimer(sf::seconds(240));
+            state = GameState::Playing;
+            loseMenu->reset();
+        }
+        else if (opt == 1) { // Quit
+            window.close();
+        }
+    }
+    else if (state == GameState::Playing) {
+        player.update(deltaTime);
+        labyrinth.update(deltaTime, player);
+        hud.update(labyrinth.getCollectedCount());
 
-    labyrinth.update(deltaTime, player);
-
-    hud.update(labyrinth.getCollectedCount());
-
-    AudioManager::getInstance().update();
+        AudioManager::getInstance().update();
+    }
 }
 
 void Game::render() {
     window.clear();
 
-    labyrinth.draw(window);
-    player.draw(window);
-    hud.draw(window);
+    if (state == GameState::Menu) {
+        mainMenu->draw();
+    }
+    else if (state == GameState::Paused) {
+        labyrinth.draw(window);
+        player.draw(window);
+        hud.draw(window);
+        pauseMenu->draw();
+    }
+    else if (state == GameState::Playing) {
+        labyrinth.draw(window);
+        player.draw(window);
+        hud.draw(window);
+    }
+    else if (state == GameState::Win) {
+        labyrinth.draw(window);
+        player.draw(window);
+        hud.draw(window);
+        winMenu->draw();
+    }
+    else if (state == GameState::Lose) {
+        labyrinth.draw(window);
+        player.draw(window);
+        hud.draw(window);
+        loseMenu->draw();
+    }
 
     window.display();
 }
@@ -104,9 +196,7 @@ void Game::initLabyrinth()
     labyrinth.generate(window.getSize());
 
     labyrinth.setOnWin([this]() {
-        labyrinth.reset(window.getSize());
-        player.setPosition(labyrinth.getSpawnPoint());
-        hud.startTimer(sf::seconds(240));
+        state = GameState::Win;
         });
 }
 
@@ -118,9 +208,7 @@ void Game::initHUD() {
     hud.setMargin({ 15.f, 15.f });
 
     hud.setOnTimeout([this]() {
-        labyrinth.reset(window.getSize());
-        player.setPosition(labyrinth.getSpawnPoint());
-        hud.startTimer(sf::seconds(240));
+        state = GameState::Lose;
         });
 
     hud.startTimer(sf::seconds(240));
@@ -129,4 +217,20 @@ void Game::initHUD() {
     hud.setCollectablesTotal(labyrinth.getCollectablesCount());
     hud.setCollectablesPosition({ 0.f, 30.f });       
     hud.setCollectablesSpacing(10.f);
+
+    mainMenu = std::make_unique<MenuScreen>(window, font, false);
+    mainMenu->setTitle("Echoes of the Labyrinth");
+    mainMenu->setOptions({ "Start", "Quit" });
+
+    pauseMenu = std::make_unique<MenuScreen>(window, font, true);
+    pauseMenu->setTitle("Pause");
+    pauseMenu->setOptions({ "Restart", "Quit" });
+
+    winMenu = std::make_unique<MenuScreen>(window, font, true);
+    winMenu->setTitle("¡You Won!");
+    winMenu->setOptions({ "Restart", "Quit" });
+
+    loseMenu = std::make_unique<MenuScreen>(window, font, true);
+    loseMenu->setTitle("You Lost");
+    loseMenu->setOptions({ "Restart", "Quit" });
 }

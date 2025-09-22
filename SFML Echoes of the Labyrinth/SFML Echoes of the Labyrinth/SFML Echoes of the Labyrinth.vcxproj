@@ -141,6 +141,7 @@
     <ClCompile Include="HUDCollectables.cpp" />
     <ClCompile Include="Labyrinth.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MenuScreen.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerInput.cpp" />
     <ClCompile Include="Walls.cpp" />
@@ -157,6 +158,7 @@
     <ClInclude Include="HUD.h" />
     <ClInclude Include="HUDCollectables.h" />
     <ClInclude Include="Labyrinth.h" />
+    <ClInclude Include="MenuScreen.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerInput.h" />
     <ClInclude Include="ResourceManager.h" />
