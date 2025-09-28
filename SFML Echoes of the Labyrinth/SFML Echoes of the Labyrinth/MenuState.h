@@ -3,6 +3,10 @@
 #include "MenuScreen.h"
 #include <memory>
 
+/**
+ * @class MenuState
+ * @brief Represents the main menu state of the game, where the player can start or quit.
+ */
 class MenuState : public IGameState {
 public:
     MenuState(Game& game);

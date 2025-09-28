@@ -3,6 +3,10 @@
 #include <vector>
 #include <string>
 
+/**
+ * @class MenuScreen
+ * @brief A generic menu screen that can display a title and a list of selectable options.
+ */
 class MenuScreen {
 public:
     MenuScreen(sf::RenderWindow& window, sf::Font& font, bool useOverlay = false);

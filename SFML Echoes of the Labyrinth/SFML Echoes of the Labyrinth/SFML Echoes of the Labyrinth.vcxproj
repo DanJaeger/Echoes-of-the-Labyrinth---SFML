@@ -155,6 +155,7 @@
     <ClInclude Include="Animation.h" />
     <ClInclude Include="AudioManager.h" />
     <ClInclude Include="Collider.h" />
+    <ClInclude Include="Config.h" />
     <ClInclude Include="Floor.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameTimer.h" />
