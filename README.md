@@ -24,8 +24,7 @@ The goal: find 4 mystical keys and unlock the chest before time runs out! ‚è≥üó
 
 ---
 
-## Gameplay
-*(Add GIFs or screenshots of your game here)*  
+## Gameplay 
 ![Gameplay1](GitVisuals/GameCapture_1.gif)
 ![Gameplay2](GitVisuals/GameCapture_2.gif)
 ![Gameplay3](GitVisuals/GamePhoto_1.png)
