@@ -172,7 +172,7 @@ namespace Config {
 
     // ---------------- Audio ----------------
     namespace Audio {
-        static constexpr float MUSIC_VOLUME = 50.f;
+        static constexpr float MUSIC_VOLUME = 40.f;
         static constexpr float SFX_VOLUME = 100.f;
 
         inline const std::string SOUND_PICKUP = "pickup";

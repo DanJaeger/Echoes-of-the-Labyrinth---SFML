@@ -53,7 +53,7 @@ void GameTimer::update() {
 
     // Clamp remaining seconds to 0
     int seconds = std::max(0, (int)remaining.asSeconds());
-    text.setString("Tiempo: " + std::to_string(seconds));
+    text.setString("Time: " + std::to_string(seconds));
 
     // If time is up, stop and trigger callback
     if (remaining.asSeconds() <= 0) {
