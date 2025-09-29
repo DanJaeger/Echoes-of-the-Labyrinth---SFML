@@ -42,9 +42,9 @@ The goal: find 4 mystical keys and unlock the chest before time runs out! ⏳�
 # Kanban Project Managment methology 📊🧐
 
 - All tasks have been described and documented by applying a Kanban Project Managment methology in Notion to have structured worflow and clear steps inorder to complete the project 
-![KanbanWorkflow1](GitVisuals/KanbanPhoto_1.png)
-![KanbanWorkflow2](GitVisuals/KanbanPhoto_2.png)
-![KanbanWorkflow3](GitVisuals/KanbanPhoto_3.png)
+![KanbanWorkflow1](GitVisuals/KanbanWorkflow_1.png)
+![KanbanWorkflow2](GitVisuals/KanbanWorkflow_2.png)
+![KanbanWorkflow3](GitVisuals/KanbanWorkflow_3.png)
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
