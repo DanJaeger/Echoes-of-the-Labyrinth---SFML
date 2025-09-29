@@ -1,113 +1,143 @@
 #include "Game.h"
 #include "ResourceManager.h"
-#include <iostream>
-#include <filesystem>
+#include "AudioManager.h"
+#include "MenuState.h"
+#include "PlayingState.h"
+#include "PausedState.h"
+#include "WinState.h"
+#include "LoseState.h"
 
+// Constructor: sets up window, audio, resources, labyrinth, HUD, and initial state
 Game::Game()
     : window(sf::VideoMode::getDesktopMode(), "Echoes of the Labyrinth", sf::Style::Fullscreen),
     player()
 {
     initWindow();
-
+    initAudio();
     setBasePaths();
-
     initLabyrinth();
+    initHUD();
 
-    initTimer();
-
+    // Start the game in Menu state
+    changeState(StateType::Menu);
 }
 
-void Game::setBasePaths()
-{
+// Switch between different game states
+void Game::changeState(StateType newState) {
+    switch (newState) {
+    case StateType::Menu:    currentState = std::make_unique<MenuState>(*this); break;
+    case StateType::Playing: currentState = std::make_unique<PlayingState>(); break;
+    case StateType::Paused:  currentState = std::make_unique<PausedState>(*this); break;
+    case StateType::Win:     currentState = std::make_unique<WinState>(*this); break;
+    case StateType::Lose:    currentState = std::make_unique<LoseState>(*this); break;
+    }
+}
+
+// Set resource base paths for ResourceManager
+void Game::setBasePaths() {
     ResourceManager::getInstance().setTextureBasePath("assets/textures/");
     ResourceManager::getInstance().setFontBasePath("assets/fonts/");
 }
 
-void Game::initWindow()
-{
-    window.setFramerateLimit(60);
+// Configure window and view
+void Game::initWindow() {
+    window.setFramerateLimit(Config::Window::FPS);
 
     sf::View view(sf::FloatRect(0, 0, window.getSize().x, window.getSize().y));
     window.setView(view);
 }
 
+// Initialize audio system and play background music
+void Game::initAudio() {
+    auto& audio = AudioManager::getInstance();
+
+    // Load SFX
+    audio.loadSound("pickup", "assets/audio/pickup.wav");
+    audio.loadSound("openChest", "assets/audio/open_chest.wav");
+
+    // Play looping background music
+    audio.playMusic("assets/audio/bg_music.ogg", true, Config::Audio::MUSIC_VOLUME);
+}
+
+// Main game loop
 void Game::run() {
     sf::Clock clock;
 
     while (window.isOpen()) {
         processEvents();
 
+        // Calculate time since last frame
         float deltaTime = clock.restart().asSeconds();
 
         update(deltaTime);
-
         render();
     }
 }
 
+// Handle window and input events
 void Game::processEvents() {
     while (window.pollEvent(event)) {
         if (event.type == sf::Event::Closed) {
             window.close();
         }
-        else if (event.type == sf::Event::KeyPressed) {
-            if (event.key.code == sf::Keyboard::Escape) {
-                window.close();
-            }
-        }
+        // Forward event handling to the current state
+        if (currentState) currentState->handleEvent(*this, event);
     }
 }
 
+// Update game logic
 void Game::update(float deltaTime) {
-    static float elapsedDebug = 0.f;
-    elapsedDebug += deltaTime;
-    if (elapsedDebug >= 1.f) {
-        std::cout << "FPS: " << 1.f / deltaTime << std::endl;
-        elapsedDebug = 0.f;
-    }
+    // Debug: print FPS every second
+    //static float elapsedDebug = 0.f;
+    //elapsedDebug += deltaTime;
+    //if (elapsedDebug >= 1.f) {
+    //    std::cout << "FPS: " << 1.f / deltaTime << std::endl;
+    //    elapsedDebug = 0.f;
+    //}
 
-
-    player.update(deltaTime);
-
-    labyrinth.handleCollisions(player);
-
-    timer.update();
+    // Update current state
+    if (currentState) currentState->update(*this, deltaTime);
 }
 
+// Render all visible elements
 void Game::render() {
     window.clear();
 
-    labyrinth.draw(window);
-    player.draw(window);
-    timer.draw(window);
+    if (currentState) currentState->draw(*this, window);
 
     window.display();
 }
 
-void Game::initLabyrinth()
-{
+// Initialize labyrinth and bind win condition
+void Game::initLabyrinth() {
     labyrinth = Labyrinth();
     labyrinth.generate(window.getSize());
 
+    // Change to Win state when player reaches labyrinth exit
     labyrinth.setOnWin([this]() {
-        labyrinth.reset(window.getSize());
-        player.setPosition(labyrinth.getSpawnPoint());
-        timer.start(sf::seconds(240));
+        changeState(StateType::Win);
         });
 }
 
-void Game::initTimer() {
+// Initialize HUD and bind timeout condition
+void Game::initHUD() {
     sf::Font& font = ResourceManager::getInstance().getFont("clock.ttf");
-    timer.setFont(font);
-    timer.setCharacterSize(24);
-    timer.setColors(sf::Color::White, sf::Color::Black, 2.f);
-    timer.setPosition({ 10.f, 10.f });
 
-    timer.setOnTimeout([this]() {
-        labyrinth.reset(window.getSize());
-        player.setPosition(labyrinth.getSpawnPoint());
-        timer.start(sf::seconds(240));
+    hud.setFont(font);
+    hud.setTimerPosition(Config::HUD::TIMER_POSITION);
+    hud.setTimerStyle(Config::HUD::FONT_SIZE, sf::Color::White, sf::Color::Black, Config::HUD::OUTLINE_THICKNESS);
+    hud.setMargin(Config::HUD::MARGIN);
+
+    // Lose the game if time runs out
+    hud.setOnTimeout([this]() {
+        changeState(StateType::Lose);
         });
 
-    timer.start(sf::seconds(240));
+    hud.startTimer(sf::seconds(Config::Gameplay::TIME_LIMIT_SECONDS));
+
+    // Setup collectables HUD
+    hud.setCollectablesIcon(ResourceManager::getInstance().getTexture("items/collectable.png"));
+    hud.setCollectablesTotal(labyrinth.getCollectablesCount());
+    hud.setCollectablesPosition(Config::HUD::COLLECTABLES_POSITION);
+    hud.setCollectablesSpacing(Config::HUD::Collectables::SPACING);
 }

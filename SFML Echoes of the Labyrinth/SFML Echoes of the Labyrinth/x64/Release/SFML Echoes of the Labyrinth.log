@@ -1,0 +1,41 @@
+﻿  AudioManager.cpp
+  Collectable.cpp
+  Game.cpp
+D:\C++\Echoes-of-the-Labyrinth---SFML\SFML Echoes of the Labyrinth\SFML Echoes of the Labyrinth\Game.cpp(46,75): warning C4244: 'argumento': conversión de 'T' a 'T'; posible pérdida de datos
+D:\C++\Echoes-of-the-Labyrinth---SFML\SFML Echoes of the Labyrinth\SFML Echoes of the Labyrinth\Game.cpp(46,75): warning C4244:         with
+D:\C++\Echoes-of-the-Labyrinth---SFML\SFML Echoes of the Labyrinth\SFML Echoes of the Labyrinth\Game.cpp(46,75): warning C4244:         [
+D:\C++\Echoes-of-the-Labyrinth---SFML\SFML Echoes of the Labyrinth\SFML Echoes of the Labyrinth\Game.cpp(46,75): warning C4244:             T=unsigned int
+D:\C++\Echoes-of-the-Labyrinth---SFML\SFML Echoes of the Labyrinth\SFML Echoes of the Labyrinth\Game.cpp(46,75): warning C4244:         ]
+D:\C++\Echoes-of-the-Labyrinth---SFML\SFML Echoes of the Labyrinth\SFML Echoes of the Labyrinth\Game.cpp(46,75): warning C4244:         and
+D:\C++\Echoes-of-the-Labyrinth---SFML\SFML Echoes of the Labyrinth\SFML Echoes of the Labyrinth\Game.cpp(46,75): warning C4244:         [
+D:\C++\Echoes-of-the-Labyrinth---SFML\SFML Echoes of the Labyrinth\SFML Echoes of the Labyrinth\Game.cpp(46,75): warning C4244:             T=float
+D:\C++\Echoes-of-the-Labyrinth---SFML\SFML Echoes of the Labyrinth\SFML Echoes of the Labyrinth\Game.cpp(46,75): warning C4244:         ]
+D:\C++\Echoes-of-the-Labyrinth---SFML\SFML Echoes of the Labyrinth\SFML Echoes of the Labyrinth\Game.cpp(46,55): warning C4244: 'argumento': conversión de 'T' a 'T'; posible pérdida de datos
+D:\C++\Echoes-of-the-Labyrinth---SFML\SFML Echoes of the Labyrinth\SFML Echoes of the Labyrinth\Game.cpp(46,55): warning C4244:         with
+D:\C++\Echoes-of-the-Labyrinth---SFML\SFML Echoes of the Labyrinth\SFML Echoes of the Labyrinth\Game.cpp(46,55): warning C4244:         [
+D:\C++\Echoes-of-the-Labyrinth---SFML\SFML Echoes of the Labyrinth\SFML Echoes of the Labyrinth\Game.cpp(46,55): warning C4244:             T=unsigned int
+D:\C++\Echoes-of-the-Labyrinth---SFML\SFML Echoes of the Labyrinth\SFML Echoes of the Labyrinth\Game.cpp(46,55): warning C4244:         ]
+D:\C++\Echoes-of-the-Labyrinth---SFML\SFML Echoes of the Labyrinth\SFML Echoes of the Labyrinth\Game.cpp(46,55): warning C4244:         and
+D:\C++\Echoes-of-the-Labyrinth---SFML\SFML Echoes of the Labyrinth\SFML Echoes of the Labyrinth\Game.cpp(46,55): warning C4244:         [
+D:\C++\Echoes-of-the-Labyrinth---SFML\SFML Echoes of the Labyrinth\SFML Echoes of the Labyrinth\Game.cpp(46,55): warning C4244:             T=float
+D:\C++\Echoes-of-the-Labyrinth---SFML\SFML Echoes of the Labyrinth\SFML Echoes of the Labyrinth\Game.cpp(46,55): warning C4244:         ]
+  GameTimer.cpp
+  Goal.cpp
+  HUDCollectables.cpp
+  Labyrinth.cpp
+  LoseState.cpp
+  MenuScreen.cpp
+  MenuState.cpp
+  PausedState.cpp
+  Player.cpp
+  PlayerInput.cpp
+  PlayingState.cpp
+  Walls.cpp
+  WinState.cpp
+  main.cpp
+  Generando código
+  1 of 1938 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    1 functions had inline decision re-evaluated but remain unchanged
+  Generación de código finalizada
+  SFML Echoes of the Labyrinth.vcxproj -> D:\C++\Echoes-of-the-Labyrinth---SFML\SFML Echoes of the Labyrinth\x64\Release\SFML Echoes of the Labyrinth.exe
