@@ -40,10 +40,14 @@ The goal: find 4 mystical keys and unlock the chest before time runs out! ⏳�
 
 
 # Kanban Project Managment methology 📊🧐
+
 - All tasks have been described and documented by applying a Kanban Project Managment methology in Notion to have structured worflow and clear steps inorder to complete the project 
-![Kanban workflow1](GitVisuals/KanbanPhoto_1.png)
-![Kanban workflow2](GitVisuals/KanbanPhoto_2.png)
-![Kanban workflow3](GitVisuals/KanbanPhoto_3.png)
+![KanbanWorkflow1](GitVisuals/KanbanPhoto_1.png)
+![KanbanWorkflow2](GitVisuals/KanbanPhoto_2.png)
+![KanbanWorkflow3](GitVisuals/KanbanPhoto_3.png)
+
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## PROJECT NOTE:
     This is my first project using SFML and was implemented with the objective of practicing my game development skills and my C++ knowledge. Even though it worked out fine, I realize there is still much more to learn and improve.
